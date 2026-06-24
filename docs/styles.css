@@ -1,0 +1,175 @@
+/* =========================================================================
+   jbriggs.org — design system
+   Handwritten HTML & CSS. Set in Spectral + IBM Plex Mono.
+
+   Palette is deliberately COOL — a faintly green-grey paper, cool near-black
+   ink, and a single fountain-pen ink-blue used only for links and the margin
+   spine. Not the warm-cream + terracotta "AI-academic" default.
+   Fonts are loaded per-page via <link> in the document head.
+   ========================================================================= */
+
+:root{
+  --paper:#F4F5F3;
+  --ink:#1A1D1F;
+  --ink-soft:#5C6166;
+  --rule:#D7D9D4;
+  --accent:#1F3A56;        /* ink blue — links + margin spine only */
+  --plate:#ECEEE9;
+  --measure:640px;         /* text column */
+  --margin-col:200px;      /* sidenote column */
+  --gap:40px;
+  --shell:880px;           /* outer content width */
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Spectral",Georgia,serif;
+  font-weight:400;
+  font-size:19px;
+  line-height:1.62;
+  letter-spacing:.002em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:#dfe6e9}
+
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(31,58,86,.28);transition:border-color .2s ease}
+a:hover{border-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:1px}
+
+.wrap{max-width:var(--shell);margin:0 auto;padding:0 28px}
+
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--paper);
+      padding:.6em 1em;border:none;z-index:100}
+.skip:focus{left:0}
+
+/* ---- masthead / top nav ------------------------------------------------- */
+.top{display:flex;justify-content:space-between;align-items:baseline;
+     padding:30px 0 0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;
+     letter-spacing:.04em;color:var(--ink-soft);text-transform:lowercase}
+.top .site{border:none;color:var(--ink-soft)}
+.top .site:hover{color:var(--accent)}
+.top nav a{margin-left:22px;border:none;color:var(--ink-soft)}
+.top nav a:hover{color:var(--accent)}
+.top nav a[aria-current="page"]{color:var(--ink)}
+
+header.masthead{padding:64px 0 30px;border-bottom:1px solid var(--rule);max-width:var(--measure)}
+.masthead h1{font-weight:400;font-size:46px;line-height:1.04;letter-spacing:-.012em;margin:0 0 14px}
+.roles{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.03em;
+        color:var(--ink-soft);margin:0 0 26px;line-height:1.7;text-transform:lowercase}
+.standfirst{font-size:20px;line-height:1.6;color:#34383b;margin:0;font-weight:300}
+.standfirst em{font-style:italic}
+
+/* page-level masthead variant (interior pages: smaller title) */
+.masthead.page h1{font-size:38px}
+
+/* ---- article + margin notes (the signature) ---------------------------- */
+main{padding:46px 0 0}
+.article{max-width:var(--shell);margin:0 auto}
+.article > p,.article > h2,.article > blockquote,.article > ul,.article > .lede{max-width:var(--measure)}
+.article p{margin:0 0 1.35em}
+.article .lede{font-size:21px;font-weight:300;color:#34383b;line-height:1.55;margin:0 0 1.5em}
+.article h2{font-weight:500;font-size:15px;font-family:"IBM Plex Mono",monospace;
+            letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+            margin:52px 0 18px}
+.article h3{font-weight:500;font-size:19px;margin:30px 0 8px}
+.article ul{padding-left:1.1em;margin:0 0 1.35em}
+.article li{margin:0 0 .5em}
+
+.ref{font-family:"IBM Plex Mono",monospace;font-size:.62em;vertical-align:.5em;
+     color:var(--accent);padding:0 1px;line-height:0}
+
+.sidenote{
+  float:right;clear:right;width:var(--margin-col);
+  margin-right:calc(-1 * (var(--margin-col) + var(--gap)));
+  margin-bottom:.4em;font-size:14px;line-height:1.5;color:var(--ink-soft);
+  border-left:1px solid var(--accent);padding-left:14px;font-weight:300;
+}
+.sidenote .num{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);
+               display:block;margin-bottom:3px;letter-spacing:.03em}
+.sidenote a{font-size:inherit}
+
+/* ---- feature figure (one breakout; the single parallax move) ----------- */
+.figure{margin:42px 0 46px;max-width:var(--shell)}
+.plate{background:var(--plate);border:1px solid var(--rule);overflow:hidden;
+       display:block;will-change:transform}
+.plate svg{display:block;width:100%;height:auto}
+figcaption{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-soft);
+           letter-spacing:.02em;margin-top:10px;max-width:var(--measure)}
+
+/* ---- pull quote -------------------------------------------------------- */
+blockquote{margin:40px 0;padding:0;font-size:26px;line-height:1.35;font-weight:300;
+           color:var(--ink);max-width:var(--measure);letter-spacing:-.006em}
+
+/* ---- section heading (mono eyebrow) ------------------------------------ */
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;
+         text-transform:uppercase;color:var(--ink-soft);margin:0 0 18px;font-weight:500}
+
+/* ---- list of entries (writing / built / talks) ------------------------- */
+.entries{max-width:var(--measure);margin:0;border-top:1px solid var(--rule);padding-top:8px}
+.entry{display:grid;grid-template-columns:96px 1fr;gap:8px 18px;padding:15px 0;
+       border-bottom:1px solid var(--rule);align-items:baseline}
+.entry .when{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.02em}
+.entry .t{font-size:19px}
+.entry .t a{border:none}
+.entry .t a:hover{color:var(--accent)}
+.entry .desc{grid-column:2;font-size:15.5px;color:var(--ink-soft);font-weight:300;line-height:1.5;margin:4px 0 0;max-width:46ch}
+.entry .desc.full{grid-column:1 / -1}
+
+/* tag/label run, mono */
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;
+        color:var(--ink-soft);text-transform:lowercase}
+
+/* ---- block sections on multi-section pages ----------------------------- */
+.block{max-width:var(--measure);margin:60px 0 0}
+.block:first-of-type{margin-top:46px}
+.block p{margin:0 0 1.2em}
+.more{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.03em}
+
+/* ---- note / draft callout (replaces the old dashed placeholder) -------- */
+.note{max-width:var(--measure);margin:26px 0;padding:14px 18px;background:var(--plate);
+      border-left:2px solid var(--accent);font-size:15px;line-height:1.55;
+      color:var(--ink-soft);font-weight:300}
+.note b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;
+        text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px;font-weight:500}
+
+/* ---- contact + colophon ------------------------------------------------ */
+.contact{max-width:var(--measure);margin:58px 0 0;font-size:18px;color:#34383b}
+footer{max-width:var(--shell);margin:80px auto 60px;padding:18px 28px 0;border-top:1px solid var(--rule)}
+.colophon{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);
+          letter-spacing:.02em;line-height:1.7}
+.colophon a{border:none;color:var(--ink-soft)}
+.colophon a:hover{color:var(--accent)}
+
+/* ---- motion: reveal-on-enter (once), small distance -------------------- */
+.reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ---- responsive -------------------------------------------------------- */
+@media (max-width:900px){
+  .article{max-width:var(--measure)}
+  .figure{max-width:var(--measure)}
+  .sidenote{float:none;width:auto;margin:14px 0 24px;border-left:2px solid var(--accent);padding-left:16px}
+  .top{flex-direction:column;gap:14px}
+  .top nav a{margin-left:0;margin-right:22px}
+}
+@media (max-width:560px){
+  body{font-size:18px}
+  .masthead h1{font-size:36px}
+  .masthead.page h1{font-size:30px}
+  blockquote{font-size:22px}
+  .entry{grid-template-columns:1fr}
+  .entry .when{order:2}
+  .entry .desc{grid-column:1}
+}
+
+/* ---- accessibility floor: kill all motion on request ------------------- */
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .plate{transform:none!important}
+  *{scroll-behavior:auto!important}
+}

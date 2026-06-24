@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects &amp; Software — Jonathan Briggs</title>
+  <meta name="description" content="Software and projects by Jonathan Briggs: a math placement model, Canvas LMS tools, and other technology built for independent schools.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="wrap nav" aria-label="Primary">
+      <a class="brand" href="index.html">Jonathan&nbsp;Briggs</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="insights.html">Insights</a>
+        <a href="projects.html" aria-current="page">Projects</a>
+        <a href="speaking.html">Speaking</a>
+        <a href="about.html">About</a>
+        <a href="mailto:jbriggs@eastsideprep.org">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow">Projects &amp; software</p>
+      <h1>Tools built for the real work of schools.</h1>
+      <p class="lead">
+        Each of these started with a concrete problem at Eastside Prep — a process that took too long,
+        a question the data could answer but no one had time to ask. Some you can read about; some you
+        can download and use.
+      </p>
+    </section>
+
+    <!-- MATH PLACEMENT -->
+    <section class="section" id="math-placement">
+      <div class="wrap">
+        <p class="eyebrow">AI orchestration · Python · operations</p>
+        <h2>Math Placement System</h2>
+        <div class="prose">
+          <p>
+            Placing incoming students into the right math course is a high-stakes, time-consuming
+            judgment call. Every applicant arrives with a different combination of transcripts, test
+            scores, and teacher evaluations, and the people making placements have to hold all of it
+            in their heads at once. I built a system that does the heavy lifting while keeping the
+            reasoning transparent.
+          </p>
+          <p>
+            It works in two stages. First, a multi-agent pipeline reads each student's profile
+            independently and distills it into a clean, structured summary — one agent per student, so
+            the messy source material never has to be processed all at once. Then a forward-looking
+            placement model determines what math each student is currently doing and recommends the
+            next course in the sequence, producing a workbook with placements, confidence scores, and
+            short synopses that a human can review and override.
+          </p>
+          <p>
+            The model is deliberately tunable: thresholds, the way different signals are weighted, and
+            calibration against prior years all live in configuration rather than buried in code. That
+            means the people who own the placement process — not just the person who wrote the
+            software — can adjust it and see how the results change.
+          </p>
+          <blockquote>
+            The goal was never to automate judgment away. It was to give the people exercising that
+            judgment a clearer, faster, more consistent starting point.
+          </blockquote>
+          <div class="tags">
+            <span class="tag">Multi-agent</span>
+            <span class="tag">Python</span>
+            <span class="tag">Excel reporting</span>
+            <span class="tag">Config-driven model</span>
+            <span class="tag">Confidence scoring</span>
+          </div>
+          <div class="placeholder">
+            <strong>Privacy note</strong>
+            Because this repository is public, this project is described at a conceptual level only —
+            no student data, source data fields, or sensitive logic are published here. If you'd like
+            a deeper write-up or a sanitized walkthrough for a specific audience, I can prepare one.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CANVAS TOOLS -->
+    <section class="section" id="canvas-tools">
+      <div class="wrap">
+        <p class="eyebrow">JavaScript · Canvas LMS · downloadable</p>
+        <h2>Canvas Bookmarklet Tools</h2>
+        <div class="prose">
+          <p>
+            Canvas holds enormous amounts of information about how a class is actually running, but it
+            rarely surfaces the questions teachers and administrators most want answered. These are
+            small, focused tools — bookmarklets that run entirely in your own authenticated browser
+            session, talk only to Canvas's own API, and render a tidy overlay on the page. Nothing is
+            sent anywhere; there are no accounts, servers, or secrets involved.
+          </p>
+
+          <h3>Grading Delay by Section</h3>
+          <p>
+            Run from any Canvas assignment page, this shows how long grading actually took, broken down
+            by section: the median, the 90th percentile (the "90% of work graded within X" number), the
+            maximum, a histogram of timing buckets, and a count of anything still ungraded. It's the
+            kind of feedback loop that helps a department see its own turnaround honestly.
+          </p>
+
+          <h3>Seating Chart Builder</h3>
+          <p>
+            A fast way to turn a Canvas roster into a workable seating chart — built with a couple of
+            colleagues to solve an everyday classroom problem rather than a technical one.
+          </p>
+
+          <div class="tags">
+            <span class="tag">Client-side only</span>
+            <span class="tag">No data leaves the browser</span>
+            <span class="tag">Canvas REST API</span>
+          </div>
+
+          <div class="placeholder">
+            <strong>Needs your input — downloads</strong>
+            These tools are good download candidates. Tell me whether to (a) host install pages here so
+            colleagues can drag a bookmarklet to their bookmarks bar, and/or (b) link out to a public
+            GitHub repo. I'll then wire up a real "Download / Install" section with the actual code.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MORE -->
+    <section class="section" id="more">
+      <div class="wrap">
+        <p class="eyebrow">More</p>
+        <h2>Other work</h2>
+        <div class="placeholder">
+          <strong>Needs your input — additional projects</strong>
+          You mentioned projects at EPS and elsewhere, plus other software you've written. Send me a
+          short list (name, the problem it solved, the tech, and whether it can be referenced or
+          downloaded) and I'll add each as a section or card here.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span class="meta">© <span id="year">2026</span> Jonathan Briggs</span>
+      <div class="footer-links">
+        <a href="insights.html">Insights</a>
+        <a href="projects.html">Projects</a>
+        <a href="speaking.html">Speaking</a>
+        <a href="about.html">About</a>
+        <a href="mailto:jbriggs@eastsideprep.org">Email</a>
+      </div>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
