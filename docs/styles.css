@@ -149,6 +149,12 @@ footer{max-width:var(--shell);margin:80px auto 60px;padding:18px 28px 0;border-t
 .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
+/* ---- work titles (Built page) ------------------------------------------ */
+.work-title{font-family:"Spectral",serif;font-weight:500;font-size:25px;
+            letter-spacing:-.006em;color:var(--ink);line-height:1.15;margin:0 0 10px}
+.work-title a{border:none;color:var(--ink)}
+.work-title a:hover{color:var(--accent)}
+
 /* ---- responsive -------------------------------------------------------- */
 @media (max-width:900px){
   .article{max-width:var(--measure)}

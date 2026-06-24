@@ -1,139 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insights — Jonathan Briggs</title>
-  <meta name="description" content="Writing on AI, learning, school leadership, and the evolution of instruction by Jonathan Briggs.">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing — Jonathan Briggs</title>
+<meta name="description" content="Essays and field notes on AI, learning, and the evolution of instruction by Jonathan Briggs.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <nav class="wrap nav" aria-label="Primary">
-      <a class="brand" href="index.html">Jonathan&nbsp;Briggs</a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="insights.html" aria-current="page">Insights</a>
-        <a href="projects.html">Projects</a>
-        <a href="speaking.html">Speaking</a>
-        <a href="about.html">About</a>
-        <a href="mailto:jbriggs@eastsideprep.org">Contact</a>
-      </div>
+<div class="wrap">
+  <div class="top">
+    <a class="site" href="index.html">jbriggs.org</a>
+    <nav aria-label="Primary">
+      <a href="writing.html" aria-current="page">Writing</a>
+      <a href="built.html">Built</a>
+      <a href="talks.html">Talks</a>
+      <a href="about.html">About</a>
     </nav>
+  </div>
+
+  <header class="masthead page">
+    <h1>Writing</h1>
+    <p class="standfirst">Essays and field notes on AI, learning, and the evolution of instruction — written from inside the work, not from the outside.</p>
   </header>
 
   <main id="main">
-    <section class="hero wrap">
-      <p class="eyebrow">Insights</p>
-      <h1>Writing on AI, learning, and the evolution of instruction.</h1>
-      <p class="lead">
-        Essays and field notes for school leaders and the people who build alongside them — written
-        from inside the work, not from the outside.
-      </p>
-    </section>
-
-    <section class="section">
-      <div class="wrap">
-
-        <!-- Category filter -->
-        <div class="filter" role="group" aria-label="Filter insights by category">
-          <button class="chip is-active" data-cat="all">All</button>
-          <button class="chip" data-cat="ai-learning">AI &amp; Learning</button>
-          <button class="chip" data-cat="assessment">Assessment</button>
-          <button class="chip" data-cat="faculty">Faculty Practice</button>
-          <button class="chip" data-cat="leadership">School Leadership</button>
-          <button class="chip" data-cat="governance">Ethics &amp; Governance</button>
-          <button class="chip" data-cat="operations">Operations</button>
+    <section class="block" style="margin-top:40px;">
+      <div class="entries">
+        <div class="entry">
+          <span class="when">Jun 2026</span>
+          <div class="t"><a href="teaching-with-clarity.html">Teaching with Clarity in the Age of AI</a></div>
+          <p class="desc">The wind sprint, proxies for learning, and what happens to teaching when a machine can produce the product we used to assign.</p>
         </div>
-
-        <div class="placeholder">
-          <strong>One live draft, the rest queued</strong>
-          The flagship essay below is a working draft built from your documented thinking — open it and
-          edit. The others are real pieces from your conceptual corpus, titled and ready to write; send
-          me your text (or say "draft it") and each becomes its own article. The category filter above
-          is fully working.
+        <div class="entry">
+          <span class="when">Soon</span>
+          <div class="t">Proxies for Learning</div>
+          <p class="desc">Teachers see products and performance; only the learner knows whether they reached full effort. What we do once the proxies stop being reliable.</p>
         </div>
-
-        <div class="grid cols-2" id="post-grid" style="margin-top:1.75rem;">
-          <article class="card" data-cat="ai-learning">
-            <p class="meta">AI &amp; Learning · draft ready to read</p>
-            <h3><a href="teaching-with-clarity.html">Teaching with Clarity in the Age of AI</a></h3>
-            <p>The wind sprint, the inner instrument, and what happens to teaching when a machine can
-               produce the product we used to assign. <strong>Live draft →</strong></p>
-          </article>
-          <article class="card" data-cat="faculty">
-            <p class="meta">Faculty Practice · queued</p>
-            <h3><a href="#">Proxies for Learning</a></h3>
-            <p>Teachers can see products, behaviors, and performance — but only the learner knows whether
-               they reached full effort. What we do once the proxies stop being reliable.</p>
-          </article>
-          <article class="card" data-cat="ai-learning">
-            <p class="meta">AI &amp; Learning · queued</p>
-            <h3><a href="#">Designing for Productive Uncertainty</a></h3>
-            <p>AI expands the possibility space — and tempts premature commitment. The teacher's work is
-               keeping ambiguity open long enough for thinking to happen.</p>
-          </article>
-          <article class="card" data-cat="faculty">
-            <p class="meta">Faculty Practice · queued</p>
-            <h3><a href="#">The Brain Has to Sweat</a></h3>
-            <p>Productive struggle, flow, and intellectual humility — why difficulty at the edge of
-               capacity is the condition for growth, not a sign something has gone wrong.</p>
-          </article>
-          <article class="card" data-cat="assessment">
-            <p class="meta">Assessment · queued</p>
-            <h3><a href="#">What AI Reveals About Assessment</a></h3>
-            <p>When a machine can produce a passable first draft of almost anything, what exactly are we
-               asking students to demonstrate — and how would we know?</p>
-          </article>
-          <article class="card" data-cat="leadership">
-            <p class="meta">School Leadership · queued</p>
-            <h3><a href="#">The Board-Level AI Conversation Schools Need</a></h3>
-            <p>Governing well through a shift this large starts with naming what we value, before we
-               decide what to adopt.</p>
-          </article>
+        <div class="entry">
+          <span class="when">Soon</span>
+          <div class="t">Designing for Productive Uncertainty</div>
+          <p class="desc">AI expands the possibility space — and tempts premature commitment. Keeping ambiguity open long enough for thinking to happen.</p>
         </div>
-
-        <p class="meta" id="empty-note" style="display:none; margin-top:1.5rem;">No insights in this category yet.</p>
+        <div class="entry">
+          <span class="when">Soon</span>
+          <div class="t">The Brain Has to Sweat</div>
+          <p class="desc">Productive struggle, flow, and intellectual humility — why difficulty at the edge of capacity is the condition for growth, not a sign something has gone wrong.</p>
+        </div>
+      </div>
+      <div class="note" style="margin-top:28px;">
+        <b>More coming</b>
+        Three pieces are drafted from notes and publishing soon. Writing cross-posts to <em>Evolution of Instruction</em>.
       </div>
     </section>
   </main>
+</div>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <span class="meta">© <span id="year">2026</span> Jonathan Briggs</span>
-      <div class="footer-links">
-        <a href="insights.html">Insights</a>
-        <a href="projects.html">Projects</a>
-        <a href="speaking.html">Speaking</a>
-        <a href="about.html">About</a>
-        <a href="mailto:jbriggs@eastsideprep.org">Email</a>
-      </div>
-    </div>
-  </footer>
+<footer>
+  <p class="colophon">
+    © <span id="year">2026</span> Jonathan Briggs · Handwritten HTML &amp; CSS. Set in Spectral and IBM Plex Mono.<br>
+    Writing cross-posts to <em>Evolution of Instruction</em>.
+  </p>
+</footer>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    // Category filter
-    const chips = document.querySelectorAll('.chip');
-    const cards = document.querySelectorAll('#post-grid .card');
-    const emptyNote = document.getElementById('empty-note');
-    chips.forEach(chip => chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('is-active'));
-      chip.classList.add('is-active');
-      const cat = chip.dataset.cat;
-      let shown = 0;
-      cards.forEach(card => {
-        const match = cat === 'all' || card.dataset.cat === cat;
-        card.style.display = match ? '' : 'none';
-        if (match) shown++;
-      });
-      emptyNote.style.display = shown ? 'none' : '';
-    }));
-  </script>
+<script src="scripts.js"></script>
 </body>
 </html>
