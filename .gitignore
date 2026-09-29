@@ -2,3 +2,7 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Stray runtime artifacts — never publish
+*.dump
+erl_crash.dump
