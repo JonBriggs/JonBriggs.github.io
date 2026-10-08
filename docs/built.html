@@ -33,27 +33,74 @@
   <main id="main">
     <article class="article">
 
-      <section class="block" id="math-placement" style="margin-top:40px;">
-        <p class="eyebrow">python · ai orchestration · operations</p>
-        <h2 class="work-title">Math Placement System</h2>
-        <p>Placing incoming students into the right math course is a high-stakes, time-consuming judgment call — every applicant arrives with a different mix of transcripts, scores, and teacher evaluations. This system does the heavy lifting while keeping the reasoning transparent.</p>
-        <p>A multi-agent pipeline reads each student's profile independently and distills it into a clean summary; a forward-looking, tunable model then recommends the next course in the sequence, with confidence scores and short synopses a human reviews and can override. The thresholds and weightings live in configuration, so the people who own placement — not just whoever wrote the code — can adjust it.</p>
-        <div class="note">
-          <b>Privacy</b>
-          Described conceptually only — no student data or sensitive logic appears here or in this site's source. A sanitized walkthrough is available on request.
-        </div>
-      </section>
+      <p style="margin-top:8px;">Software I've built for the real work of schools — most of it still running at Eastside Prep. Each began as a concrete problem rather than a demo.</p>
 
-      <section class="block" id="canvas-tools">
-        <p class="eyebrow">javascript · canvas lms · client-side</p>
-        <h2 class="work-title">Canvas Bookmarklet Tools</h2>
-        <p>Canvas holds enormous detail about how a class is actually running, but rarely surfaces the questions teachers most want answered. These are small, focused tools that run entirely in your own authenticated browser session, talk only to Canvas's own API, and render a tidy overlay — nothing is sent anywhere, and there are no accounts or servers involved.</p>
-        <p><strong>Grading Delay by Section</strong> shows how long grading actually took, broken down by section: the median, the 90th percentile, the maximum, a histogram, and a count of anything still ungraded. <strong>Seating Chart Builder</strong> turns a roster into a workable seating chart in a couple of clicks.</p>
-        <div class="note">
-          <b>Coming</b>
-          Install pages so colleagues can add these to their bookmarks bar are on the way.
+      <p class="eyebrow" style="margin-top:34px;">In use</p>
+      <div class="entries">
+        <div class="entry">
+          <span class="when">Rails · MySQL</span>
+          <div class="t">Four11</div>
+          <p class="desc">The information system behind EPS — courses, sections, enrollments, teaching loads, scheduling, advising, and grades.</p>
         </div>
-      </section>
+        <div class="entry">
+          <span class="when">web</span>
+          <div class="t"><a href="https://courses.eastsideprep.org" target="_blank" rel="noopener">Online Course Catalog&nbsp;↗</a></div>
+          <p class="desc">The public course catalog at courses.eastsideprep.org, generated from Four11.</p>
+        </div>
+        <div class="entry">
+          <span class="when">web</span>
+          <div class="t">Course Requests</div>
+          <p class="desc">The annual course-request workflow for students and advisors that feeds scheduling.</p>
+        </div>
+        <div class="entry">
+          <span class="when">Phoenix</span>
+          <div class="t">Mycelio</div>
+          <p class="desc">Curriculum-mapping infrastructure — a flexible, living record of what EPS actually teaches, layered over the information system rather than duplicating it.</p>
+        </div>
+        <div class="entry">
+          <span class="when">web</span>
+          <div class="t">epsigns</div>
+          <p class="desc">Campus digital signage.</p>
+        </div>
+      </div>
+
+      <p class="eyebrow" style="margin-top:40px;">AI</p>
+      <div class="entries">
+        <div class="entry" id="math-placement">
+          <span class="when">Python · agents</span>
+          <div class="t">PSIS / Ravenna Data Capture</div>
+          <p class="desc">Pulls structured applicant data out of Ravenna into clean profiles — the front end of a forward-looking, tunable math-placement model that proposes each student's next course with a confidence score for a human to review. Described conceptually only; no student data appears here or in this site's source.</p>
+        </div>
+        <div class="entry" id="canvas-tools">
+          <span class="when">JavaScript</span>
+          <div class="t">Canvas Bookmarklet Maker</div>
+          <p class="desc">Generates small client-side tools that add the views Canvas lacks — grading-delay analytics by section, a seating-chart builder — running entirely in the teacher's own browser, talking only to Canvas's own API.</p>
+        </div>
+      </div>
+
+      <p class="eyebrow" style="margin-top:40px;">Retired</p>
+      <div class="entries">
+        <div class="entry">
+          <span class="when">2020</span>
+          <div class="t">COVID Prescreen</div>
+          <p class="desc">The daily health-screening tool the school ran during the pandemic.</p>
+        </div>
+        <div class="entry">
+          <span class="when">retired</span>
+          <div class="t">Avatari</div>
+          <p class="desc">— summary to come.</p>
+        </div>
+        <div class="entry">
+          <span class="when">retired</span>
+          <div class="t">Assignment Machine</div>
+          <p class="desc">— summary to come.</p>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:34px;">
+        <b>First pass</b>
+        Several summaries here are drafts for Jon to tighten, and a few still need one. Slides, files, and fuller write-ups — including moving the conference materials off Canvas and onto this site — are in progress.
+      </div>
 
     </article>
   </main>
