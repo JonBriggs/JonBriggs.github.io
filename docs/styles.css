@@ -122,13 +122,23 @@ blockquote{margin:40px 0;padding:0;font-size:26px;line-height:1.35;font-weight:3
 /* download row under an entry (Talks): mono, quiet; the file type + size sit beside each link */
 .entry .files{grid-column:2;margin:8px 0 0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;
               line-height:1.9;color:var(--ink-soft);letter-spacing:.01em}
-.entry .files a::before{content:"↓ ";color:var(--ink-soft)}
+.entry .files a[download]::before{content:"↓ ";color:var(--ink-soft)}
 .entry .files .file{white-space:nowrap}
 .entry .files .meta{font-size:11px;color:var(--ink-soft)}
 .entry .files .sep{margin:0 4px}
+.entry .files a.go::before{content:"▶ "}
+
+/* ---- play panel (Explorations): the way into a toy, quiet but unmissable -- */
+.play{max-width:var(--measure);margin:30px 0 40px;padding:16px 22px 15px;background:var(--plate);
+      border-left:2px solid var(--accent)}
+.play a{font-size:24px;font-weight:500;letter-spacing:-.005em;border:none}
+.play a::after{content:" →"}
+.play a:hover{border-bottom:1px solid var(--accent)}
+.play .meta{display:block;margin-top:4px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+            letter-spacing:.02em;color:var(--ink-soft)}
 
 /* ---- portrait (About): hangs in the margin column like a sidenote ------ */
-.portrait{float:right;clear:right;width:var(--margin-col);margin:6px 0 1em var(--gap)}
+.portrait{float:right;clear:right;width:120px;margin:6px 0 1em var(--gap)}
 .portrait img{display:block;width:100%;height:auto;border:1px solid var(--rule)}
 
 /* tag/label run, mono */
@@ -171,7 +181,7 @@ footer{max-width:var(--shell);margin:80px auto 60px;padding:18px 28px 0;border-t
   .article{max-width:var(--measure)}
   .figure{max-width:var(--measure)}
   .sidenote{float:none;width:auto;margin:14px 0 24px;border-left:2px solid var(--accent);padding-left:16px}
-  .portrait{float:none;width:180px;margin:6px 0 28px}
+  .portrait{float:none;width:110px;margin:6px 0 24px}
   .top{flex-direction:column;gap:14px}
   .top nav a{margin-left:0;margin-right:22px}
 }
