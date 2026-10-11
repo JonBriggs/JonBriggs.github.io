@@ -1,0 +1,60 @@
+# Jonathan Briggs
+
+> Jonathan Briggs is the Chief Technology and Innovation Officer at Eastside Preparatory School (Kirkland, WA), where he sits on the Senior Leadership Team, chairs the Academic Operations group, and sets the school's AI strategy with the Head of School and Board. He writes and speaks about how AI changes teaching and learning, builds the software behind the school's academic operations, and advises schools and companies working through questions about technology and learning.
+
+He joined Eastside Prep in 2005 as its founding Director of Technology, after four years teaching math and physics at the Bentley School in California, and kept teaching for another ten years: more than two dozen courses across science, math, programming, and the social sciences, including Evolution of Society, created with Matt Delaney. He holds a B.A. in physics from Williams College.
+
+Central ideas in his writing: learning requires struggle the way muscle requires resistance; AI loosens the link between a product (an essay, a problem set) and the mind that made it, so schools need more clarity about what they want students to become; teaching runs on proxies and crutches, and AI makes the proxy trivial to produce; a school's AI approach should come from its mission, not its fears, and works better as a living approach than a fixed policy.
+
+Contact: Eastside Prep inquiries to jbriggs@eastsideprep.org; outside advising or anything else to jonathan.briggs@gmail.com. Canonical domain: https://jbriggs.org
+
+## Site
+
+- [About](https://jbriggs.org/about.html): Bio, teaching history, and contact.
+- [Writing](https://jbriggs.org/writing.html): Essays, interviews and podcasts, press, and a teaching portfolio.
+- [Talks](https://jbriggs.org/talks.html): Talks and workshops since 2012, each with a summary and downloadable slides and materials (CC BY).
+- [Built](https://jbriggs.org/built.html): Software written for the real work of schools, most of it still in use at Eastside Prep.
+- [Explorations](https://jbriggs.org/explorations.html): Small playable experiments that run in the browser.
+
+## Essays (hosted in full on jbriggs.org)
+
+- [Teaching with Clarity in the Age of AI](https://jbriggs.org/teaching-with-clarity.html) (Fall 2026): The wind sprint, the grade as a breaking lever, and why the conditions for struggle turn out to be relational, not cognitive.
+- [Mental Exercise](https://jbriggs.org/mental-exercise.html) (Fall 2024, Inspire): Cognitive dissonance and flow, the felt experience of hard thinking, and why schools should name the discomfort rather than smooth it away.
+- [Proxies and Crutches](https://jbriggs.org/proxies-and-crutches.html) (Spring 2024, Inspire): The stand-ins teaching relies on, the supports it leans on, and what happens to both when AI makes the proxy trivial to produce.
+- [A Conversation with Socrates Via Artificial Intelligence](https://jbriggs.org/a-conversation-with-socrates.html) (Fall 2023, Inspire): AI as a threshold moment on the order of the internet and the smartphone, and a dialogue with Socrates on consciousness and the nature of intelligence.
+- [Eastside Prep's Covid-19 Response](https://jbriggs.org/covid-19-response.html) (2020): Moving a full school online in under a week, and the questions other organizations asked as they faced the same call.
+
+## Essays (published on eastsideprep.org and elsewhere)
+
+- [Navigating AI Together: An Update on Our Journey](https://www.eastsideprep.org/insight-navigating-ai-together-an-update-on-our-journey/) (Winter 2026): The EPS AI Approach moves from draft into student handbooks and course syllabi.
+- [Independent Curriculum: Independent Projects](https://www.eastsideprep.org/independent-curriculum-independent-projects/) (Spring 2023): A project-shaped independent study for students who direct plays, write apps, or produce albums.
+- [History of Tech @ Eastside Prep](https://www.eastsideprep.org/history-of-tech-eastside-prep/) (Fall 2022): Each technology era at a school that grew from sixteen students to 530.
+- [Leading Amid COVID-19: Reflecting on the Early Weeks of School Closure](https://www.eastsideprep.org/leading-amid-covid-19-reflecting-on-the-early-weeks-of-school-closure/) (April 2020, NAIS Independent Ideas): Five EPS leaders on the first weeks of closure, including standing up a remote-learning platform in days for 600 people. With Matt Delaney, Paul Hagen, Terry Macaluso, and Sam Uzwack.
+- [The Counterintuitive Process of Preparing Students for the Future](https://www.eastsideprep.org/insight-the-counter-intuitive-process-of-preparing-students-for-the-future/) (Fall 2019): Teach what will always be true, and how to read the world as it is now.
+- [Professional Development Portfolio](https://jbriggs.pdp.madeateps.org/) (2023): Two decades of teaching, with early lesson plans, rejected proposals, and what former students remember.
+
+## Talks
+
+- [Ditch the Chat, Build a Workspace](https://jbriggs.org/talks.html) (2026, NWAIS, with Sam Uzwack): Moving past chat-based AI to a workspace of persistent files, atomic notes, and agents that read accumulated thinking. Slides, lab worksheet, prompt, and skill available.
+- [Five Clarities for Teaching in the Age of AI](https://jbriggs.org/talks.html) (2026, NWAIS, with Alicia Hale): Intent, effort, proxies, ambiguity, and the hard-to-measure, with a workshop on redesigning an assignment.
+- [Mission-Driven AI Approach](https://jbriggs.org/talks.html) (2026, WFIS Future of Schools Forum, with Sam Uzwack): An AI approach as a pressure test on a school's mission. Slides, the annotated EPS AI Approach, and the session packet available.
+
+## Built
+
+- [Four11](https://jbriggs.org/built.html): The information system behind Eastside Prep (courses, enrollments, scheduling, advising, grades). Rails and MySQL.
+- [Mycelio](https://jbriggs.org/built.html): Curriculum-mapping infrastructure layered over the information system. Phoenix.
+- [Course Requests](https://jbriggs.org/built.html): The annual course-request workflow that feeds scheduling. Elixir and Phoenix.
+- [Online Course Catalog](https://courses.eastsideprep.org): Eastside Prep's public course catalog, generated from Four11.
+- [Canvas Bookmarklet Maker](https://jbriggs.org/built.html): Client-side tools that add views Canvas lacks, running entirely in the teacher's browser.
+- [Evolution of Society](http://evosociety.org/): A course co-developed with Matt Delaney since 2011, tracking technology's effect on society.
+
+## Explorations
+
+- [Math Magic](https://jbriggs.org/math-magic.html): A free math-facts game for addition, subtraction, multiplication, and division with negative numbers, plus times-table Tetris. A missed question returns as the same kind of problem with new numbers. [Play in the browser](https://jbriggs.org/play/math-magic.html).
+
+## Optional
+
+- [Interviews and podcasts](https://jbriggs.org/writing.html): Colleague AI conversations with Dr. Min Sun (2026); Insightful Questions, Eastside Prep's podcast (2025).
+- [The Next Chapter for AI in Schools](https://www.geekwire.com/2025/the-next-chapter-for-ai-in-schools-navigating-a-new-era-with-caution-and-curiosity/) (GeekWire, 2025): Interview on AI in schools.
+- [Science Teachers with an 'Iron' Will](https://www.sfgate.com/education/article/san-francisco-science-teachers-with-an-iron-2742305.php) (San Francisco Chronicle, July 2004): The Exploratorium's Iron Science Teacher competition, from his years teaching physics.
+- [Earlier talks, 2012 to 2019](https://jbriggs.org/talks.html): Makerspaces, Arduinos, OpenSCAD, Canvas customization, real-world student projects, and designing school systems teachers adopt.
