@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math Magic — Jonathan Briggs</title>
+<meta name="description" content="A math-facts game built at home: a missed question comes back as the same kind of problem with new numbers, and the game keeps a quiet record of what's improving.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="wrap">
+  <div class="top">
+    <a class="site" href="index.html">jbriggs.org</a>
+    <nav aria-label="Primary">
+      <a href="writing.html">Writing</a>
+      <a href="built.html">Built</a>
+      <a href="explorations.html" aria-current="page">Explorations</a>
+      <a href="talks.html">Talks</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+
+  <header class="masthead page">
+    <p class="roles" style="margin-bottom:14px;"><a href="explorations.html" style="border:none;">← explorations</a></p>
+    <h1>Math Magic</h1>
+    <p class="roles">a math-facts game · 2026 · <a href="play/math-magic.html">play it in the browser</a></p>
+  </header>
+
+  <main id="main">
+    <article class="article">
+
+      <p class="reveal">My daughter needed practice with math facts: adding and subtracting numbers from −100 to 100, and multiplying and dividing from −12 to 12. Worksheets weren't working. So we made a game in which every right answer uncovers one piece of a hidden picture, and she doesn't learn whether it's a bunny, a puppy, or a mandala until the last piece is in.</p>
+
+      <h2 class="reveal">The rule that does the work</h2>
+
+      <aside class="sidenote"><span class="num">e.g.</span>Miss −6 − 43 and the next question is −25 − 60: again a negative minus a larger positive, so the answer is negative again.</aside>
+      <p class="reveal">Most practice apps are designed around the right answer. The more interesting design question is what happens after a wrong one. Here, a missed question is followed by another of the same <em>kind</em>, with new numbers. Same operation, same signs, and for addition and subtraction the same relationship between the sizes of the two numbers, so the answer has the same sign. Guessing stops paying. That isn't because it's punished. It's because the question keeps coming back until the idea underneath it lands.</p>
+
+      <p class="reveal">The same instinct shapes what gets asked. Question types she has been missing lately come up more often, and each answer is timed, so a fact she gets right slowly still counts as unfinished work.</p>
+
+      <h2 class="reveal">What it notices</h2>
+
+      <aside class="sidenote"><span class="num">privacy</span>Nothing leaves the device. There's no account and no server; the record lives in the browser's own storage.</aside>
+      <p class="reveal">A parent's view sits behind a small Stats button. It breaks results down by operation and by sign (both positive, mixed, both negative) and lists every question type from hardest to easiest. It also puts the overall average next to a trailing one, so you can tell, rather than guess, whether practice is actually helping. Times tables get their own 13&nbsp;×&nbsp;13 grid, colored by accuracy or by speed. The child sees a gentler version of the same record: every so often, a note that she's faster or more accurate than her usual.</p>
+
+      <h2 class="reveal">Four ways to play</h2>
+
+      <aside class="sidenote"><span class="num">placement</span>The best spot is found the way Tetris-playing programs do it: try every rotation in every column, score each resulting board for holes, height, bumpiness and cleared lines, and keep the best.</aside>
+      <p class="reveal">The mystery picture comes in two kinds, animals or a mandala drawn fresh with new colors each time. A small virtual pet hatches from an egg and is fed, washed and played with by solving problems. Times Table Tetris drops pieces that each carry a fact, falling a little faster every few answers. Answer in time and the piece lands in the best open spot. Miss, and it falls where it is and starts to pile up.</p>
+
+      <h2 class="reveal">How it was made</h2>
+
+      <p class="reveal">It is a single HTML file, written over one long conversation with Claude. I described what she needed, tried each version, and pushed back on what didn't work. What stays with me is how short the distance has become between noticing a need at the kitchen table and holding a tool built for one particular learner. That distance used to be the reason schools bought software built for the average student. I'm not sure it will be for much longer.</p>
+
+      <p class="reveal"><a href="play/math-magic.html">Play Math Magic</a>. It works on a tablet, and progress is saved on whatever device you play on.</p>
+
+    </article>
+
+    <p class="contact reveal">
+      <a href="explorations.html">← All explorations</a> · Reach me at <a href="mailto:jonathan.briggs@gmail.com">jonathan.briggs@gmail.com</a>.
+    </p>
+  </main>
+</div>
+
+<footer>
+  <p class="colophon">
+    © <span id="year">2026</span> Jonathan Briggs · Handwritten HTML &amp; CSS. Set in Spectral and IBM Plex Mono.
+  </p>
+</footer>
+
+<script src="scripts.js"></script>
+</body>
+</html>

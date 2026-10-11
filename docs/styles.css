@@ -85,7 +85,7 @@ main{padding:46px 0 0}
 
 .sidenote{
   float:right;clear:right;width:var(--margin-col);
-  margin-right:calc(-1 * (var(--margin-col) + var(--gap)));
+  margin-right:0;margin-left:var(--gap);   /* .article is already the full shell: text measure + gap + this column */
   margin-bottom:.4em;font-size:14px;line-height:1.5;color:var(--ink-soft);
   border-left:1px solid var(--accent);padding-left:14px;font-weight:300;
 }
@@ -119,6 +119,17 @@ blockquote{margin:40px 0;padding:0;font-size:26px;line-height:1.35;font-weight:3
 .entry .t a:hover{color:var(--accent)}
 .entry .desc{grid-column:2;font-size:15.5px;color:var(--ink-soft);font-weight:300;line-height:1.5;margin:4px 0 0;max-width:46ch}
 .entry .desc.full{grid-column:1 / -1}
+/* download row under an entry (Talks): mono, quiet; the file type + size sit beside each link */
+.entry .files{grid-column:2;margin:8px 0 0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;
+              line-height:1.9;color:var(--ink-soft);letter-spacing:.01em}
+.entry .files a::before{content:"↓ ";color:var(--ink-soft)}
+.entry .files .file{white-space:nowrap}
+.entry .files .meta{font-size:11px;color:var(--ink-soft)}
+.entry .files .sep{margin:0 4px}
+
+/* ---- portrait (About): hangs in the margin column like a sidenote ------ */
+.portrait{float:right;clear:right;width:var(--margin-col);margin:6px 0 1em var(--gap)}
+.portrait img{display:block;width:100%;height:auto;border:1px solid var(--rule)}
 
 /* tag/label run, mono */
 .kicker{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;
@@ -160,6 +171,7 @@ footer{max-width:var(--shell);margin:80px auto 60px;padding:18px 28px 0;border-t
   .article{max-width:var(--measure)}
   .figure{max-width:var(--measure)}
   .sidenote{float:none;width:auto;margin:14px 0 24px;border-left:2px solid var(--accent);padding-left:16px}
+  .portrait{float:none;width:180px;margin:6px 0 28px}
   .top{flex-direction:column;gap:14px}
   .top nav a{margin-left:0;margin-right:22px}
 }
@@ -171,6 +183,7 @@ footer{max-width:var(--shell);margin:80px auto 60px;padding:18px 28px 0;border-t
   .entry{grid-template-columns:1fr}
   .entry .when{order:2}
   .entry .desc{grid-column:1}
+  .entry .files{grid-column:1}
 }
 
 /* ---- accessibility floor: kill all motion on request ------------------- */

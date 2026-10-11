@@ -1,0 +1,1774 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math Magic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff7fb; --ink:#4a3b4c; --soft:#8a7a8c; --card:#ffffff; --accent:#ff6fa8; --accent2:#7c6cff;
+    --good:#2fb36d; --bad:#e8505b; --line:#f0dce8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,"Trebuchet MS",system-ui,sans-serif}
+  body{min-height:100vh;display:flex;flex-direction:column}
+  button{font-family:inherit;cursor:pointer}
+  header{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:10px 16px;background:linear-gradient(90deg,#ffe3f0,#e9e4ff)}
+  .brand{font-weight:900;font-size:22px;letter-spacing:.3px}
+  .progress{display:flex;align-items:center;gap:8px;flex:1;min-width:160px;max-width:360px}
+  .bar{flex:1;height:14px;border-radius:99px;background:#fff;overflow:hidden;box-shadow:inset 0 0 0 2px #f3cfe1}
+  #barFill{height:100%;width:0;background:linear-gradient(90deg,#ff8fb1,#b48cff);transition:width .5s}
+  #progText{font-weight:800;font-size:14px;white-space:nowrap}
+  .hbtns{display:flex;gap:6px;flex-wrap:wrap}
+  .hbtns button{border:0;background:#fff;border-radius:12px;padding:8px 12px;font-weight:800;font-size:15px;color:var(--ink);box-shadow:0 2px 0 #e7c9da}
+  .hbtns button:active{transform:translateY(2px);box-shadow:none}
+  .theme{display:inline-flex;background:#fff;border-radius:12px;padding:3px;box-shadow:0 2px 0 #e7c9da}
+  .hbtns .theme button{box-shadow:none;background:transparent;padding:5px 10px;border-radius:9px}
+  .hbtns .theme button.on{background:linear-gradient(90deg,#ffd1e3,#e3dcff)}
+  #streak{font-weight:900;font-size:16px;min-width:56px;text-align:center}
+  main{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 16px 20px}
+  #hint{font-weight:800;color:var(--soft);margin:4px 0 10px;text-align:center}
+  #pic{width:min(94vw, calc(100vh - 150px));max-width:760px;min-width:280px;height:auto;border-radius:22px;box-shadow:0 6px 24px rgba(160,90,140,.18);touch-action:manipulation;
+    background:#fffaf3 radial-gradient(#f1dfea 1.3px, transparent 1.5px) 0 0/22px 22px}
+  .zone{opacity:0;pointer-events:none;transition:opacity .8s ease}
+  .zone > *{stroke:#5b4a5e;stroke-width:2.5;stroke-linejoin:round}
+  .zone.filled{opacity:1;animation:pop .6s ease-out;transform-box:fill-box;transform-origin:center}
+  @keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.06)}100%{transform:scale(1)}}
+  .deco{pointer-events:none;opacity:0;transition:opacity .8s ease .25s}
+  .deco.shown{opacity:1}
+  .marker{cursor:pointer;transform-box:fill-box;transform-origin:center;animation:bob 2.6s ease-in-out infinite}
+  .marker .mb{stroke:#fff;stroke-width:3}
+  .marker .msh{fill:rgba(120,60,120,.28)}
+  .marker text{fill:#fff;font-weight:900;text-anchor:middle;dominant-baseline:central;pointer-events:none;font-family:Nunito,system-ui,sans-serif}
+  .marker:hover{filter:brightness(1.1)}
+  .marker.bonus .mb{stroke:#fff2a6;stroke-width:4}
+  .marker.bonus text{fill:#7a4d00}
+  .marker.active{animation:none}
+  .marker.active .mb{fill:#ffe066}
+  .marker.active text{fill:#7a4d00}
+  #hud{display:flex;gap:12px;font-weight:900;font-size:17px;white-space:nowrap}
+  #hud small{font-size:12px;color:var(--soft);font-weight:800}
+  #toast{position:fixed;top:74px;left:50%;transform:translateX(-50%);background:#fff;padding:10px 20px;border-radius:99px;font-weight:900;font-size:20px;
+    box-shadow:0 6px 20px rgba(120,60,120,.25);opacity:0;z-index:35;pointer-events:none;white-space:nowrap}
+  #toast.show{animation:toast 2.4s ease forwards}
+  @keyframes toast{0%{opacity:0;transform:translate(-50%,-12px) scale(.9)}10%{opacity:1;transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0}}
+  .marker.gone{opacity:0;pointer-events:none;animation:none;transition:opacity .4s}
+  @keyframes bob{50%{transform:scale(1.12)}}
+
+  .overlay{position:fixed;inset:0;background:rgba(74,59,76,.35);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+  .hidden{display:none !important}
+  .card{background:var(--card);border-radius:24px;box-shadow:0 12px 40px rgba(80,40,80,.3);position:relative}
+  .qcard{width:min(380px,100%);padding:22px 20px 18px;text-align:center}
+  .x{position:absolute;top:10px;right:12px;border:0;background:#f6eef3;border-radius:50%;width:34px;height:34px;font-size:16px;font-weight:900;color:var(--ink)}
+  #qMsg{min-height:24px;font-weight:800;font-size:16px;margin:2px 30px 6px}
+  #qMsg.good{color:var(--good)} #qMsg.bad{color:var(--bad)}
+  #qText{font-size:clamp(30px,9vw,44px);font-weight:900;margin:6px 0 12px;white-space:nowrap}
+  #ansBox{font-size:38px;font-weight:900;height:62px;line-height:58px;border-radius:16px;border:3px solid #e9d6e2;margin:0 auto 14px;width:70%;background:#fffafc}
+  #ansBox.empty{color:#d2bfcc}
+  .shake{animation:shake .4s}
+  @keyframes shake{20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+  .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .pad button{height:56px;border:0;border-radius:14px;background:#f3efff;font-size:24px;font-weight:900;color:var(--ink);box-shadow:0 3px 0 #d9d1f5}
+  .pad button:active{transform:translateY(3px);box-shadow:none}
+  .pad button.minus{background:#ffeef5;box-shadow:0 3px 0 #f2cadb}
+  #checkBtn{margin-top:12px;width:100%;height:58px;border:0;border-radius:16px;background:linear-gradient(90deg,#ff8fb1,#b48cff);color:#fff;font-size:24px;font-weight:900;box-shadow:0 4px 0 #a87bd9}
+  #checkBtn:active{transform:translateY(3px);box-shadow:none}
+
+  .panel{width:min(980px,100%);max-height:92vh;overflow:auto;padding:22px 22px 26px}
+  .panel h2{margin:0 0 4px;font-size:26px}
+  .panel h3{margin:22px 0 8px;font-size:18px}
+  .sub{color:var(--soft);font-size:14px;margin:0}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+  .stat{background:#faf5ff;border-radius:16px;padding:12px 14px}
+  .stat b{display:block;font-size:26px;font-weight:900}
+  .stat span{font-size:13px;color:var(--soft);font-weight:700}
+  ul.insights{margin:0;padding-left:20px;line-height:1.6}
+  table{border-collapse:collapse;width:100%;font-size:14px}
+  th,td{padding:8px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--soft)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .grid td.cell{text-align:center;border-radius:10px;border:3px solid #fff;line-height:1.25}
+  .grid td.cell b{font-size:18px}
+  .grid td.cell small{display:block;color:#5b4a5e;font-weight:700}
+  .tablewrap{overflow-x:auto}
+  .mini{display:inline-block;height:10px;border-radius:5px;background:#b48cff;vertical-align:middle}
+  .row-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  .row-btns button,.setbtn{border:0;border-radius:12px;padding:10px 14px;font-weight:800;font-size:15px;background:#f3efff;color:var(--ink)}
+  .danger{background:#ffe7ea !important;color:#b3263a !important}
+  .setcard{width:min(460px,100%);padding:22px}
+  .setcard fieldset{border:2px solid var(--line);border-radius:14px;margin:12px 0;padding:10px 14px}
+  .setcard legend{font-weight:900;padding:0 6px}
+  .setcard label{display:inline-flex;align-items:center;gap:6px;margin:6px 14px 6px 0;font-weight:700}
+  .setcard input[type=checkbox]{width:20px;height:20px}
+  .setcard select{font-family:inherit;font-size:15px;padding:4px 8px;border-radius:8px}
+
+  .sparkle{position:fixed;pointer-events:none;font-size:30px;z-index:30;animation:floatUp 1s ease-out forwards}
+  @keyframes floatUp{from{opacity:1;transform:translate(-50%,-50%) scale(.6)}to{opacity:0;transform:translate(-50%,-140%) scale(1.3)}}
+  .confetti{position:fixed;top:-20px;width:10px;height:16px;z-index:40;pointer-events:none;border-radius:2px;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+  .wincard{padding:28px 26px;text-align:center;width:min(420px,100%)}
+  .wincard .big{font-size:72px;line-height:1}
+  .wincard h2{margin:10px 0 6px;font-size:28px}
+  .wincard button{margin-top:16px;border:0;border-radius:16px;padding:14px 22px;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff8fb1,#b48cff)}
+
+  body.mode-pet .picOnly, body.mode-pet #picView{display:none !important}
+  body:not(.mode-pet) #petView{display:none}
+  #picView{display:flex;flex-direction:column;align-items:center;width:100%}
+  #petView{width:min(560px,100%);display:flex;flex-direction:column;gap:12px}
+  .petcard{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 6px 24px rgba(160,90,140,.18);background:#fff}
+  #petSvg{display:block;width:100%;height:auto;cursor:pointer;touch-action:manipulation}
+  .speech{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:#fff;border-radius:16px;padding:8px 16px;font-weight:900;font-size:17px;
+    box-shadow:0 4px 12px rgba(120,60,120,.2);white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+  .speech:empty{display:none}
+  .petinfo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px}
+  .petinfo small{font-size:14px;color:var(--soft);white-space:nowrap}
+  .petinfo .bar{flex:1;min-width:60px}
+  #xpFill{height:100%;width:0;background:linear-gradient(90deg,#ffd34d,#ff9f43);transition:width .5s}
+  .needs{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 2px 0 #f0dce8}
+  .need{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px}
+  .need.wide{grid-column:1/-1}
+  .need .bar{height:12px}
+  .need .fill{height:100%;transition:width .5s}
+  .actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding-top:8px}
+  .actions.egg{grid-template-columns:1fr}
+  .act{position:relative;border:0;border-radius:18px;background:#fff;padding:12px 4px 10px;font-weight:900;font-size:15px;color:var(--ink);
+    box-shadow:0 4px 0 #e7c9da;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .act:active{transform:translateY(3px);box-shadow:none}
+  .act .ico{font-size:34px;line-height:1.15}
+  .act .opb{position:absolute;top:-10px;right:-4px;width:32px;height:32px;border-radius:50%;color:#fff;font-size:20px;font-weight:900;
+    display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+  .act.low{animation:nudge 1.4s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:rotate(0)}20%{transform:rotate(-4deg)}40%{transform:rotate(4deg)}60%{transform:rotate(0)}}
+  .petfoot{display:flex;gap:12px;align-items:center}
+  .goal{flex:1;display:flex;align-items:center;gap:8px;font-weight:800;white-space:nowrap}
+  .goal .bar{min-width:50px}
+  #goalFill{height:100%;width:0;background:linear-gradient(90deg,#7bdcb5,#2fb36d);transition:width .5s}
+  #shopBtn{border:0;border-radius:14px;padding:10px 16px;font-weight:900;font-size:17px;background:linear-gradient(90deg,#ffd1e3,#e3dcff);color:var(--ink);box-shadow:0 3px 0 #e0c4dc}
+  .petbody{animation:petbob 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+  @keyframes petbob{50%{transform:translateY(-6px) scaleY(1.02)}}
+  .petbody.jump{animation:petjump .6s ease}
+  @keyframes petjump{30%{transform:translateY(-40px) scale(1.05,.95)}65%{transform:translateY(0) scale(1.1,.9)}}
+  .blink{animation:blink 4.2s infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+  .egg{animation:wobble 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+  @keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+  .zzz{animation:zzz 2.4s ease-in-out infinite}
+  @keyframes zzz{0%{opacity:0;transform:translate(0,10px)}50%{opacity:1}100%{opacity:0;transform:translate(14px,-20px)}}
+  .floaty{position:fixed;font-size:40px;z-index:30;pointer-events:none;transform:translate(-50%,-50%);transition:all .75s ease-in}
+  #petNameIn{font-family:inherit;font-size:22px;font-weight:800;text-align:center;border:3px solid #e9d6e2;border-radius:14px;padding:8px 12px;width:80%;margin-top:12px;color:var(--ink)}
+  #swatches{display:flex;gap:10px;justify-content:center;margin-top:14px}
+  .sw{width:40px;height:40px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #e0cfe0}
+  .sw.on{box-shadow:0 0 0 4px #7c6cff}
+  .shop{width:min(640px,100%)}
+  .shopgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}
+  .item{border:0;background:#faf5ff;border-radius:16px;padding:10px 6px;font-weight:800;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ink)}
+  .item .ico{font-size:36px;line-height:1.2}
+  .item small{font-weight:900;color:#a0751a}
+  .item.on{outline:3px solid #b48cff;background:#f1ebff}
+  .item.poor{opacity:.55}
+  @media (max-width:480px){ .actions{grid-template-columns:repeat(2,1fr)} .petfoot{flex-direction:column;align-items:stretch} }
+
+  body.mode-tt .picOnly, body.mode-tt #picView{display:none !important}
+  body:not(.mode-tt) #ttView{display:none}
+  #ttView{width:100%;display:flex;justify-content:center}
+  .ttwrap{display:flex;gap:14px;align-items:flex-start;justify-content:center;width:100%;max-width:720px}
+  .ttboard{position:relative;flex:none;width:min(56vw, calc((100vh - 150px) * 0.625), 400px);aspect-ratio:10/16;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(60,30,90,.3)}
+  #ttCanvas{display:block;width:100%;height:100%}
+  .ttov{position:absolute;inset:0;background:rgba(42,33,64,.86);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px}
+  .ttov h2{margin:0 0 8px;font-size:24px}
+  .ttov p{font-weight:700;line-height:1.45;font-size:15px;margin:0 0 14px}
+  .ttov button{border:0;border-radius:14px;padding:12px 22px;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff8fb1,#b48cff)}
+  .ttside{flex:1;min-width:140px;max-width:270px;display:flex;flex-direction:column;gap:8px}
+  .ttq{font-size:clamp(30px,7vw,48px);font-weight:900;text-align:center;line-height:1.1}
+  .ttans{font-size:34px;font-weight:900;text-align:center;border:3px solid #e9d6e2;border-radius:14px;background:#fff;height:56px;line-height:50px}
+  .ttans.empty{color:#d2bfcc}
+  .ttpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .ttpad button{height:clamp(40px,7vh,56px);border:0;border-radius:12px;background:#f3efff;font-size:22px;font-weight:900;color:var(--ink);box-shadow:0 3px 0 #d9d1f5}
+  .ttpad button:active{transform:translateY(3px);box-shadow:none}
+  .ttpad button.ok{background:linear-gradient(90deg,#ff8fb1,#b48cff);color:#fff;box-shadow:0 3px 0 #a87bd9}
+  #ttMsg{min-height:40px;font-weight:800;font-size:14px;text-align:center;line-height:1.35}
+  #ttMsg.good{color:var(--good)} #ttMsg.bad{color:var(--bad)}
+  .ttnums{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;font-size:11px;font-weight:800;color:var(--soft);background:#fff;border-radius:12px;padding:6px 2px}
+  .ttnums b{display:block;font-size:18px;color:var(--ink)}
+  #ttFeed{min-height:24px;font-weight:900;font-size:15px;text-align:center;color:#7c6cff;opacity:0}
+  #ttFeed.show{animation:feed 2.6s ease forwards}
+  @keyframes feed{0%{opacity:0;transform:scale(.9)}10%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0}}
+  #ttPauseBtn{border:0;border-radius:12px;padding:8px;font-weight:800;font-size:15px;background:#fff;box-shadow:0 2px 0 #e7c9da;color:var(--ink)}
+  .ttgrid{width:auto}
+  .ttgrid th,.ttgrid td{padding:5px 3px;text-align:center;font-size:12px;min-width:32px;border:2px solid #fff;font-variant-numeric:tabular-nums}
+  .ttgrid td{font-weight:800;color:#4a3b4c;border-radius:6px}
+  .ttgrid td.na{background:#f4eff3}
+  .report{background:#f6fbff;border-radius:12px;padding:10px 14px;line-height:1.55;margin:8px 0}
+  .sparks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:10px}
+  .spark{margin:0;background:#fcfaff;border-radius:12px;padding:8px 10px}
+  .spark figcaption{font-size:13px;font-weight:800;color:var(--soft)}
+  .spark svg{width:100%;height:auto;display:block}
+  .toggle{display:flex;gap:6px;align-items:center;font-weight:800;font-size:14px;margin:8px 0}
+  .toggle button{border:0;border-radius:10px;padding:5px 12px;font-weight:800;background:#f3efff;color:var(--ink)}
+  .toggle button.on{background:#b48cff;color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">✨ Math Magic</div>
+  <div class="progress picOnly"><div class="bar"><div id="barFill"></div></div><span id="progText">0 / 0</span></div>
+  <div id="hud"><span id="stars" title="Stars earned">⭐ 0</span><span id="streak" title="Correct in a row">🔥 0</span></div>
+  <div class="hbtns">
+    <button id="soundBtn" title="Sound on/off">🔊</button>
+    <button id="settingsBtn" title="Settings">⚙️</button>
+    <button id="statsBtn">📊 Stats</button>
+    <div class="theme" role="group" aria-label="Picture type"><button data-theme="animals">🐾 Animals</button><button data-theme="mandala">🌸 Mandala</button><button data-theme="pet">🐣 Pet</button><button data-theme="tt">🧱 Times Tables</button></div>
+    <button id="newBtn" class="picOnly">🎨 New picture</button>
+  </div>
+</header>
+<main>
+  <div id="picView">
+  <div id="hint">Tap a bubble and solve it to reveal a piece of the mystery picture! 🌟 Golden bubbles are worth triple stars.</div>
+  <svg id="pic" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" aria-label="Coloring picture"></svg>
+  </div>
+  <div id="petView">
+    <div class="petcard">
+      <svg id="petSvg" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" aria-label="Your pet"></svg>
+      <div id="speech" class="speech"></div>
+    </div>
+    <div class="petinfo"><span id="petName"></span><small id="petLevel"></small><div class="bar"><div id="xpFill"></div></div></div>
+    <div class="needs" id="needs"></div>
+    <div class="actions" id="actions"></div>
+    <div class="petfoot">
+      <div class="goal">🎯 Daily goal <div class="bar"><div id="goalFill"></div></div><span id="goalText"></span></div>
+      <button id="shopBtn">🛍️ Shop</button>
+    </div>
+  </div>
+  <div id="ttView">
+    <div class="ttwrap">
+      <div class="ttboard">
+        <canvas id="ttCanvas" aria-label="Times table Tetris board"></canvas>
+        <div id="ttOverlay" class="ttov"><div>
+          <h2 id="ttOvTitle">🧱 Times Table Tetris</h2>
+          <p id="ttOvBody">Each block carries a times-table fact. Type the answer before it lands and it drops into the perfect spot. Miss it and it piles up! Every 6 right answers the blocks fall faster.</p>
+          <button id="ttOvBtn">Start ▶</button>
+        </div></div>
+      </div>
+      <div class="ttside">
+        <div class="ttq" id="ttQ">–</div>
+        <div id="ttAns" class="ttans empty">?</div>
+        <div class="ttpad" id="ttPad"></div>
+        <div id="ttMsg"></div>
+        <div class="ttnums"><div><b id="ttScore">0</b>score</div><div><b id="ttLines">0</b>lines</div><div><b id="ttLevel">1</b>level</div><div><b id="ttBest">0</b>best</div></div>
+        <div id="ttFeed"></div>
+        <button id="ttPauseBtn">⏸️ Pause</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+<div id="qOverlay" class="overlay hidden">
+  <div class="card qcard" id="qCard">
+    <button class="x" id="qClose" aria-label="Close">✕</button>
+    <div id="qMsg"></div>
+    <div id="qText"></div>
+    <div id="ansBox" class="empty">?</div>
+    <div class="pad" id="pad"></div>
+    <button id="checkBtn">Check ✔</button>
+  </div>
+</div>
+
+<div id="statsOverlay" class="overlay hidden">
+  <div class="card panel" id="statsPanel"></div>
+</div>
+
+<div id="setOverlay" class="overlay hidden">
+  <div class="card setcard">
+    <button class="x" data-close="setOverlay" aria-label="Close">✕</button>
+    <h2 style="margin:0">Settings</h2>
+    <p class="sub">For grown-ups. Changes apply to the next question.</p>
+    <fieldset><legend>Operations</legend>
+      <label><input type="checkbox" data-op="add"> Addition</label>
+      <label><input type="checkbox" data-op="sub"> Subtraction</label>
+      <label><input type="checkbox" data-op="mul"> Multiplication</label>
+      <label><input type="checkbox" data-op="div"> Division</label>
+    </fieldset>
+    <fieldset><legend>Signs</legend>
+      <label><input type="checkbox" data-cat="pos"> Both positive</label>
+      <label><input type="checkbox" data-cat="mix"> Mixed signs</label>
+      <label><input type="checkbox" data-cat="neg"> Both negative</label>
+    </fieldset>
+    <fieldset><legend>Number size</legend>
+      <label>+ / − up to <select id="addMax"><option>10</option><option>20</option><option>50</option><option>100</option></select></label>
+      <label>× / ÷ up to <select id="mulMax"><option>5</option><option>10</option><option>12</option></select></label>
+    </fieldset>
+    <button class="setbtn" data-close="setOverlay">Done</button>
+  </div>
+</div>
+
+<div id="hatchOverlay" class="overlay hidden">
+  <div class="card wincard">
+    <div class="big">🐣</div>
+    <h2>Your egg hatched!</h2>
+    <p class="sub">Give your new friend a name and pick a color.</p>
+    <input id="petNameIn" maxlength="14" placeholder="Mochi" autocomplete="off">
+    <div id="swatches"></div>
+    <button id="hatchBtn">Say hello! 💕</button>
+  </div>
+</div>
+
+<div id="shopOverlay" class="overlay hidden">
+  <div class="card panel shop">
+    <button class="x" data-close="shopOverlay" aria-label="Close">✕</button>
+    <h2>🛍️ Shop <span id="shopStars"></span></h2>
+    <p class="sub">Spend the stars you earn from math. Tap something you own to wear it or take it off.</p>
+    <div id="shopBody"></div>
+  </div>
+</div>
+
+<div id="winOverlay" class="overlay hidden">
+  <div class="card wincard">
+    <div class="big" id="winEmoji">🐰</div>
+    <h2 id="winTitle">You did it!</h2>
+    <p class="sub" id="winSub"></p>
+    <button id="againBtn">Draw another picture 🎨</button>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const LS_ATT = 'mpm_attempts_v1', LS_SET = 'mpm_settings_v1', LS_GAME = 'mpm_game_v1';
+const OPS = {add:'+', sub:'−', mul:'×', div:'÷'};
+const OP_NAMES = {add:'Addition', sub:'Subtraction', mul:'Multiplication', div:'Division'};
+const CATS = {pos:'Both positive', mix:'Mixed signs', neg:'Both negative'};
+const TIME_CAP = 60000; // answers slower than 60s count as 60s in averages
+
+function load(k, d){ try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch(e){ return d; } }
+function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+
+let attempts = load(LS_ATT, []); if (!Array.isArray(attempts)) attempts = [];
+const savedSet = load(LS_SET, {});
+const settings = {
+  ops: Object.assign({add:true, sub:true, mul:true, div:true}, savedSet.ops),
+  cats: Object.assign({pos:true, mix:true, neg:true}, savedSet.cats),
+  addMax: savedSet.addMax || 100, mulMax: savedSet.mulMax || 12, theme: savedSet.theme || 'animals',
+  sound: savedSet.sound !== false
+};
+const saveSettings = () => save(LS_SET, settings);
+
+/* ---------------- Sounds ---------------- */
+let actx = null;
+function ac(){
+  if (!actx){ const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; actx = new AC(); }
+  if (actx.state === 'suspended') actx.resume();
+  return actx;
+}
+function note(f, t0, dur, type='triangle', vol=0.18, fEnd){
+  if (!settings.sound) return;
+  const a = ac(); if (!a) return;
+  const t = a.currentTime + t0, o = a.createOscillator(), g = a.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t);
+  if (fEnd) o.frequency.exponentialRampToValueAtTime(fEnd, t + dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
+}
+const happySound = () => { [523.25,659.25,783.99].forEach((f,i)=>note(f, i*0.08, 0.13)); note(1046.5, 0.24, 0.28); };
+const sadSound = () => { note(392, 0, 0.24, 'triangle', 0.2, 360); note(330, 0.24, 0.45, 'triangle', 0.2, 250); };
+const giftSound = () => [880,1174.66,1567.98,2093].forEach((f,i)=>note(f, i*0.06, 0.18, 'sine', 0.15));
+const fanfare = () => { [523.25,659.25,783.99,1046.5,783.99,1046.5].forEach((f,i)=>note(f, i*0.13, i===5?0.6:0.16, 'triangle', 0.2)); };
+
+/* ---------------- Picture building ---------------- */
+const E = (cx,cy,rx,ry,rot=0) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"${rot?` transform="rotate(${rot} ${cx} ${cy})"`:''}/>`;
+const C = (cx,cy,r) => `<circle cx="${cx}" cy="${cy}" r="${r}"/>`;
+const P = d => `<path d="${d}"/>`;
+const R = (x,y,w,h,r=0) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/>`;
+const Z = (c, ...s) => ({c, s});            // a hidden piece, revealed by answering a question
+const D = (d, owner) => ({d, owner});        // static decoration; appears with its owner piece (default: the piece just before it)
+const withC = (shape, c) => shape.replace(/^<(\w+)/, `<$1 data-c="${c}"`); // shape with its own color inside a piece
+const dot = (cx,cy,r,fill) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}"/>`;
+const ln = (d, w=2.5, col='#4a3b4c') => `<path d="${d}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const eye = (cx,cy) => dot(cx,cy,11,'#3a2e39') + dot(cx-3.5,cy-4,3.8,'#fff') + dot(cx+3,cy+3,1.6,'#fff');
+
+const cloud = (cx,cy) => P(`M${cx-60},${cy+20} A20,20 0 0 1 ${cx-40},${cy-8} A28,28 0 0 1 ${cx+4},${cy-24} A25,25 0 0 1 ${cx+44},${cy-4} A18,18 0 0 1 ${cx+60},${cy+20} Z`);
+const band = (cx,cy,r1,r2) => P(`M${cx-r1},${cy} A${r1},${r1} 0 0 1 ${cx+r1},${cy} L${cx+r2},${cy} A${r2},${r2} 0 0 0 ${cx-r2},${cy} Z`);
+function flower(x, y, petal, center){
+  const petals = [0,1,2,3,4].map(k => { const a = (k*72 - 90) * Math.PI/180; return C((x+13*Math.cos(a)).toFixed(1), (y+13*Math.sin(a)).toFixed(1), 10); });
+  const p = Z(petal, ...petals);
+  return [p, Z(center, C(x,y,9)), D(ln(`M${x},${y+24} L${x},${y+55} M${x},${y+40} Q${x+14},${y+30} ${x+18},${y+36}`, 3, '#3f8f3a'), p)];
+}
+function butterfly(x, y, col){
+  return [
+    Z(col, E(x-13,y-8,13,16,-20), E(x-10,y+10,9,10,20)),
+    Z(col, E(x+13,y-8,13,16,20), E(x+10,y+10,9,10,-20)),
+    D(`<ellipse cx="${x}" cy="${y+2}" rx="3.5" ry="14" fill="#4a3b4c"/>` + ln(`M${x-1},${y-11} Q${x-6},${y-24} ${x-10},${y-26} M${x+1},${y-11} Q${x+6},${y-24} ${x+10},${y-26}`, 2))
+  ];
+}
+function sunRays(cx, cy){
+  let d = '';
+  for (let k=0;k<8;k++){ const a = k*45*Math.PI/180; d += `M${(cx+52*Math.cos(a)).toFixed(1)},${(cy+52*Math.sin(a)).toFixed(1)} L${(cx+66*Math.cos(a)).toFixed(1)},${(cy+66*Math.sin(a)).toFixed(1)} `; }
+  return D(ln(d, 4, '#f5b700'));
+}
+const skyAndSun = () => [
+  Z('#9fd8ff', R(0,0,600,140)), Z('#bfe5ff', R(0,140,600,130)), Z('#dcf2ff', R(0,270,600,330)),
+  Z('#ffd84d', C(520,78,42)), sunRays(520,78),
+];
+const hills = () => [
+  Z('#bfe8a0', P('M0,360 Q150,300 300,350 T600,330 L600,600 L0,600 Z')),
+  Z('#94d36f', P('M0,455 Q200,395 400,445 T600,425 L600,600 L0,600 Z')),
+  Z('#6fbf4f', P('M0,550 Q300,515 600,550 L600,600 L0,600 Z')),
+];
+
+function bunnyScene(){
+  const head = Z('#cdb8a0', E(380,300,92,78));
+  const items = [
+    ...skyAndSun(),
+    Z('#f4f7ff', cloud(95,75)), Z('#f4f7ff', cloud(245,50)),
+    Z('#ff6b6b', band(150,360,170,155)), Z('#ffa94d', band(150,360,155,140)), Z('#ffe066', band(150,360,140,125)),
+    Z('#69db7c', band(150,360,125,110)), Z('#74c0fc', band(150,360,110,95)), Z('#b197fc', band(150,360,95,80)),
+    ...hills(),
+    ...flower(70,470,'#ff8fb1','#ffb627'), ...flower(185,535,'#b48cff','#ffe066'), ...flower(560,470,'#ffd34d','#ff8c42'),
+    ...butterfly(545,215,'#9b8cff'),
+    // bunny
+    Z('#ffd6e7', C(484,490,30)),
+    Z('#cdb8a0', E(380,465,100,88)),
+    Z('#bba184', E(318,548,46,22)), Z('#bba184', E(442,548,46,22)),
+    Z('#fbe3cf', E(380,478,60,62)),
+    Z('#ff9a3c', P('M362,415 L398,415 Q394,465 383,510 Q378,515 375,508 Q366,465 362,415 Z')),
+    D(ln('M368,440 L377,440 M384,462 L392,462 M372,482 L380,482', 2, '#c96a1c')),
+    Z('#5cbf4a', P('M372,415 Q354,390 366,382 Q376,396 380,410 Q382,380 398,378 Q402,398 390,415 Z')),
+    Z('#cdb8a0', E(356,445,20,16)), Z('#cdb8a0', E(404,445,20,16)),
+    Z('#cdb8a0', E(338,170,30,88,-12)), Z('#ffb6c8', E(340,178,15,62,-12)),
+    Z('#cdb8a0', E(424,166,30,88,14)), Z('#ffb6c8', E(422,174,15,62,14)),
+    head,
+    D(eye(345,292) + eye(415,292)),
+    Z('#ffb3c6', E(330,326,16,10)), Z('#ffb3c6', E(430,326,16,10)),
+    Z('#ff7aa2', P('M368,310 Q380,302 392,310 Q387,322 380,323 Q373,322 368,310 Z')),
+    D(ln('M380,323 L380,331 M380,331 Q371,341 362,333 M380,331 Q389,341 398,333') + ln('M316,318 L278,312 M316,327 L276,329 M444,318 L482,312 M444,327 L484,329', 2), head),
+    Z('#ff6fa8', P('M428,232 L404,214 L406,250 Z M428,232 L452,214 L450,250 Z'), withC(C(428,232,8), '#d94585')),
+  ];
+  return {name:'bunny', emoji:'🐰', items};
+}
+
+const MANDALA_PALETTES = [
+  ['#ff8fab','#ffc2d1','#ffd6a5','#fdffb6','#caffbf','#9bf6ff','#a0c4ff','#bdb2ff'],
+  ['#f94144','#f3722c','#f8961e','#f9c74f','#90be6d','#43aa8b','#577590','#277da1'],
+  ['#ffadad','#ffd6a5','#fdffb6','#caffbf','#9bf6ff','#a0c4ff','#bdb2ff','#ffc6ff'],
+  ['#3d348b','#7678ed','#f7b801','#f18701','#f35b04','#ffd6e0','#c1fba4','#7bf1a8'],
+  ['#264653','#2a9d8f','#8ab17d','#e9c46a','#f4a261','#e76f51','#fcd5ce','#b5e2fa'],
+];
+// petal pointing along +x from radius r0 to r1, rotated to angle a around the center
+function petal(a, r0, r1, w, round){
+  const d = r1 - r0;
+  const path = round
+    ? `M${r0},0 C${r0+d*0.3},${w} ${r1-w*0.2},${w} ${r1},0 C${r1-w*0.2},${-w} ${r0+d*0.3},${-w} ${r0},0 Z`
+    : `M${r0},0 C${r0+d*0.35},${w*1.2} ${r0+d*0.75},${w*0.8} ${r1},0 C${r0+d*0.75},${-w*0.8} ${r0+d*0.35},${-w*1.2} ${r0},0 Z`;
+  return `<path d="${path}" transform="translate(300 300) rotate(${a})"/>`;
+}
+function ringDots(r, n, rad, fill, offset = 0){
+  let h = '';
+  for (let k = 0; k < n; k++){ const a = (k*360/n + offset)*Math.PI/180; h += dot((300 + r*Math.cos(a)).toFixed(1), (300 + r*Math.sin(a)).toFixed(1), rad, fill); }
+  return h;
+}
+function mandalaScene(){
+  const c = shuffle([...MANDALA_PALETTES[Math.floor(Math.random()*MANDALA_PALETTES.length)]]);
+  const items = [Z(c[0], R(0,0,600,600))];
+  const disk = Z(c[1], C(300,300,288));
+  items.push(disk, D(ringDots(276, 48, 3.5, '#fff'), disk));
+  for (let k = 0; k < 12; k++) items.push(Z(c[2], petal(k*30 + 15, 118, 280, 46, true)));
+  for (let k = 0; k < 12; k++) items.push(Z(k % 2 ? c[3] : c[4], petal(k*30, 118, 255, 40, false)));
+  const ring = Z(c[5], C(300,300,150));
+  items.push(ring, D(ringDots(138, 24, 4, '#fff', 7.5), ring));
+  for (let k = 0; k < 8; k++) items.push(Z(k % 2 ? c[6] : c[7], petal(k*45 + 22.5, 70, 146, 30, true)));
+  const mid = Z(c[3], C(300,300,78));
+  items.push(mid, D(ringDots(70, 16, 3, '#fff'), mid));
+  for (let k = 0; k < 6; k++) items.push(Z(c[2], petal(k*60, 20, 74, 22, true)));
+  const center = Z(c[4], C(300,300,24));
+  items.push(center, D(dot(300, 300, 7, '#fff'), center));
+  return {name:'mandala', emoji:'🌸', items};
+}
+
+function puppyScene(){
+  const head = Z('#e8b77a', E(340,300,86,76));
+  const face = Z('#fff1dd', E(340,338,44,30), withC(E(290,338,12,8), '#ffb3c6'), withC(E(390,338,12,8), '#ffb3c6'), withC(E(340,322,15,10), '#4a3434'));
+  const ballTop = Z('#ff6b6b', P('M468,530 A32,32 0 0 1 532,530 Z'));
+  const pawL = Z('#fff1dd', E(314,552,24,13)), pawR = Z('#fff1dd', E(366,552,24,13));
+  const items = [
+    ...skyAndSun(),
+    Z('#f4f7ff', cloud(120,70)), Z('#f4f7ff', cloud(330,45)),
+    ...hills(),
+    Z('#f4a259', P('M60,335 L130,285 L200,335 L200,455 L60,455 Z')),
+    Z('#6b3e26', P('M108,455 L108,405 A22,22 0 0 1 152,405 L152,455 Z')),
+    Z('#d64545', P('M42,342 L130,270 L218,342 L206,352 L130,292 L54,352 Z')),
+    ...flower(230,545,'#ff8fb1','#ffd34d'), ...flower(565,440,'#b48cff','#ffe066'), ...flower(32,500,'#ffd34d','#ff8c42'),
+    ...butterfly(250,165,'#ff9ff3'),
+    ballTop,
+    Z('#4dabf7', P('M468,530 A32,32 0 0 0 532,530 Z')),
+    D(`<ellipse cx="488" cy="512" rx="7" ry="4" fill="#fff" opacity=".8" transform="rotate(-30 488 512)"/>`, ballTop),
+    // puppy
+    Z('#e0a96a', P('M415,480 Q470,455 462,395 Q482,398 482,425 Q484,475 425,500 Z')),
+    Z('#e8b77a', E(340,470,85,80)),
+    Z('#dba46a', E(272,515,38,42)), Z('#dba46a', E(408,515,38,42)),
+    Z('#fff1dd', E(340,445,42,52)),
+    Z('#e8b77a', R(298,455,32,95,14)), Z('#e8b77a', R(350,455,32,95,14)),
+    pawL, pawR,
+    head,
+    Z('#a8693a', E(372,288,27,25)),
+    face,
+    Z('#ff7aa2', P('M328,352 Q340,382 352,352 Z')),
+    Z('#a8693a', P('M276,248 Q236,250 228,320 Q228,358 256,352 Q276,322 288,262 Z')),
+    Z('#a8693a', P('M404,248 Q444,250 452,320 Q452,358 424,352 Q404,322 392,262 Z')),
+    Z('#e84a5f', P('M272,366 Q340,394 408,366 L410,382 Q340,412 270,382 Z'), withC(C(340,408,11), '#ffd34d')),
+    D(eye(310,290) + eye(372,290), head),
+    D(`<ellipse cx="335" cy="319" rx="4" ry="2.5" fill="#fff" opacity=".8"/>` + ln('M340,332 L340,346 M340,346 Q329,356 318,347 M340,346 Q351,356 362,347'), face),
+    D(ln('M318,543 L318,556', 2), pawL), D(ln('M362,543 L362,556', 2), pawR),
+  ];
+  return {name:'puppy', emoji:'🐶', items};
+}
+
+const svg = $('#pic');
+let scene, zones = [], filledCount = 0, currentZone = -1;
+
+function buildScene(){
+  sceneTheme = settings.theme;
+  scene = settings.theme === 'mandala' ? mandalaScene() : Math.random() < 0.5 ? bunnyScene() : puppyScene();
+  let html = '';
+  const idx = new Map();
+  let last = -1;
+  zones = [];
+  for (const it of scene.items){
+    if (it.d !== undefined){
+      const o = idx.has(it.owner) ? idx.get(it.owner) : last;
+      html += `<g class="deco" data-o="${o}">${it.d}</g>`;
+    } else {
+      last = zones.length; idx.set(it, last);
+      html += `<g class="zone" data-i="${last}">${it.s.join('')}</g>`;
+      zones.push({color: it.c, filled: false});
+    }
+  }
+  svg.innerHTML = DEFS + html + '<g id="markers"></g>';
+  svg.querySelectorAll('.zone').forEach(g => { for (const el of g.children) el.style.fill = el.dataset.c || zones[+g.dataset.i].color; });
+  placeMarkers();
+  shuffle(zones.map((_, i) => i)).slice(0, 3).forEach(i => zones[i].bonus = true);
+  assignOps(); renderMarkers();
+  filledCount = 0; updateProgress();
+}
+
+const OP_COLORS = {add:['#ffb3d1','#ff4f93'], sub:['#b5dcff','#3d8ee8'], mul:['#cbbcff','#7454ee'], div:['#b0ecc2','#2fa65e']};
+const grad = (id, a, b) => `<radialGradient id="${id}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`;
+const DEFS = '<defs>' + Object.entries(OP_COLORS).map(([k, [a, b]]) => grad('g-' + k, a, b)).join('') + grad('g-gold', '#fff6b8', '#f5a800') + '</defs>';
+function shuffle(a){ for (let i = a.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const enabledOps = () => { const o = Object.keys(OPS).filter(k => settings.ops[k]); return o.length ? o : Object.keys(OPS); };
+function assignOps(){
+  // spread the enabled operations evenly across the unrevealed pieces
+  const ops = enabledOps(); let bag = [];
+  zones.forEach(z => { if (z.filled) return; if (!bag.length) bag = shuffle([...ops]); z.op = bag.pop(); });
+}
+function renderMarkers(){
+  svg.querySelector('#markers').innerHTML = zones.map((z, i) => z.filled ? '' :
+    `<g class="marker${z.bonus ? ' bonus' : ''}" data-i="${i}" style="animation-delay:${(-Math.random()*2.6).toFixed(2)}s">` +
+    `<circle class="msh" cx="${z.mx}" cy="${z.my + 2.5}" r="${z.mr + 1}"/>` +
+    `<circle class="mb" cx="${z.mx}" cy="${z.my}" r="${z.mr}" fill="url(#g-${z.bonus ? 'gold' : z.op})"/>` +
+    `<text x="${z.mx}" y="${z.my + 1}" font-size="${(z.mr*1.4).toFixed(1)}">${OPS[z.op]}</text></g>`).join('');
+}
+
+/* Find a spot for each piece's bubble: rasterize the picture to see which piece is on top
+   at each point, then put the bubble deep inside the visible part, away from other bubbles. */
+function shapePath(el){
+  const tag = el.tagName.toLowerCase(), n = k => parseFloat(el.getAttribute(k)) || 0;
+  let p = new Path2D();
+  if (tag === 'path') p = new Path2D(el.getAttribute('d'));
+  else if (tag === 'circle') p.ellipse(n('cx'), n('cy'), n('r'), n('r'), 0, 0, Math.PI*2);
+  else if (tag === 'ellipse') p.ellipse(n('cx'), n('cy'), n('rx'), n('ry'), 0, 0, Math.PI*2);
+  else if (tag === 'rect'){ if (n('rx') && p.roundRect) p.roundRect(n('x'), n('y'), n('width'), n('height'), n('rx')); else p.rect(n('x'), n('y'), n('width'), n('height')); }
+  const t = el.transform && el.transform.baseVal.consolidate();
+  let m = null;
+  if (t){ m = t.matrix; const q = new Path2D(); q.addPath(p, new DOMMatrix([m.a, m.b, m.c, m.d, m.e, m.f])); p = q; }
+  const b = el.getBBox();
+  let pts = [[b.x, b.y], [b.x+b.width, b.y], [b.x, b.y+b.height], [b.x+b.width, b.y+b.height]];
+  if (m) pts = pts.map(([x, y]) => [m.a*x + m.c*y + m.e, m.b*x + m.d*y + m.f]);
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  return {path: p, box: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]};
+}
+function placeMarkers(){
+  const STEP = 5, N = 600 / STEP;
+  const cv = document.createElement('canvas'); cv.width = cv.height = 600;
+  const ctx = cv.getContext('2d');
+  const shapes = [];
+  svg.querySelectorAll('.zone').forEach(g => { for (const el of g.children) shapes.push({zi: +g.dataset.i, ...shapePath(el)}); });
+  const owner = new Int16Array(N*N).fill(-1);
+  for (let gy = 0; gy < N; gy++) for (let gx = 0; gx < N; gx++){
+    const x = gx*STEP + STEP/2, y = gy*STEP + STEP/2;
+    for (let s = shapes.length-1; s >= 0; s--){
+      const sh = shapes[s], b = sh.box;
+      if (x < b[0] || x > b[2] || y < b[1] || y > b[3]) continue;
+      if (ctx.isPointInPath(sh.path, x, y)){ owner[gy*N+gx] = sh.zi; break; }
+    }
+  }
+  // chamfer distance from each cell to the edge of its piece's visible area
+  const dist = new Float32Array(N*N).fill(1e9);
+  const same = (i, gx, gy) => gx >= 0 && gy >= 0 && gx < N && gy < N && owner[gy*N+gx] === owner[i];
+  for (let gy = 0; gy < N; gy++) for (let gx = 0; gx < N; gx++){
+    const i = gy*N+gx;
+    if (!same(i,gx-1,gy) || !same(i,gx+1,gy) || !same(i,gx,gy-1) || !same(i,gx,gy+1)) dist[i] = 1;
+  }
+  const relax = (i, gx, gy, w) => { if (same(i, gx, gy)) dist[i] = Math.min(dist[i], dist[gy*N+gx] + w); };
+  for (let gy = 0; gy < N; gy++) for (let gx = 0; gx < N; gx++){
+    const i = gy*N+gx; relax(i,gx-1,gy,1); relax(i,gx,gy-1,1); relax(i,gx-1,gy-1,1.41); relax(i,gx+1,gy-1,1.41);
+  }
+  for (let gy = N-1; gy >= 0; gy--) for (let gx = N-1; gx >= 0; gx--){
+    const i = gy*N+gx; relax(i,gx+1,gy,1); relax(i,gx,gy+1,1); relax(i,gx+1,gy+1,1.41); relax(i,gx-1,gy+1,1.41);
+  }
+  const cells = zones.map(() => []);
+  owner.forEach((o, i) => { if (o >= 0) cells[o].push(i); });
+  const placed = [];
+  const order = zones.map((_, i) => i).sort((a, b) => cells[a].length - cells[b].length);
+  for (const zi of order){
+    const z = zones[zi];
+    if (!cells[zi].length){
+      const b = svg.querySelector(`.zone[data-i="${zi}"]`).getBBox();
+      z.mx = b.x + b.width/2; z.my = b.y + b.height/2; z.mr = 14; placed.push(z); continue;
+    }
+    const maxD = Math.max(...cells[zi].map(c => dist[c]));
+    let cand = cells[zi].filter(c => dist[c] >= Math.max(1, maxD*0.6));
+    if (cand.length > 400) cand = shuffle(cand).slice(0, 400);
+    let best = cand[0], bestScore = -Infinity, bestClear = 99;
+    for (const c of cand){
+      const x = (c % N)*STEP + STEP/2, y = Math.floor(c / N)*STEP + STEP/2;
+      let clear = 99;
+      for (const p of placed) clear = Math.min(clear, Math.hypot(p.mx - x, p.my - y) - p.mr);
+      const score = Math.min(clear, 45) + 0.7*dist[c]*STEP + Math.random()*3;
+      if (score > bestScore){ bestScore = score; best = c; bestClear = clear; }
+    }
+    z.mx = (best % N)*STEP + STEP/2; z.my = Math.floor(best / N)*STEP + STEP/2;
+    z.mr = Math.max(14, Math.min(19, dist[best]*STEP*0.9, bestClear - 2));
+    placed.push(z);
+  }
+  // nudge apart any bubbles that still overlap
+  for (let it = 0; it < 30; it++){
+    let moved = false;
+    for (let a = 0; a < placed.length; a++) for (let b = a+1; b < placed.length; b++){
+      const p = placed[a], q = placed[b], dx = q.mx - p.mx, dy = q.my - p.my, d = Math.hypot(dx, dy) || 0.01, need = p.mr + q.mr + 2;
+      if (d < need){ const k = (need - d)/2/d; p.mx -= dx*k; p.my -= dy*k; q.mx += dx*k; q.my += dy*k; moved = true; }
+    }
+    if (!moved) break;
+  }
+  placed.forEach(z => { z.mx = +Math.min(588, Math.max(12, z.mx)).toFixed(1); z.my = +Math.min(588, Math.max(12, z.my)).toFixed(1); });
+}
+
+function updateProgress(){
+  $('#progText').textContent = `${filledCount} / ${zones.length}`;
+  $('#barFill').style.width = (zones.length ? 100*filledCount/zones.length : 0) + '%';
+}
+function sparkle(x, y, ch){
+  const s = document.createElement('div'); s.className = 'sparkle'; s.textContent = ch;
+  s.style.left = x + 'px'; s.style.top = y + 'px';
+  document.body.appendChild(s); setTimeout(() => s.remove(), 1100);
+}
+function fillZone(i, gift = false){
+  if (zones[i].filled) return;
+  zones[i].filled = true; filledCount++;
+  svg.querySelector(`.zone[data-i="${i}"]`).classList.add('filled');
+  svg.querySelectorAll(`.deco[data-o="${i}"]`).forEach(d => d.classList.add('shown'));
+  const m = svg.querySelector(`.marker[data-i="${i}"]`);
+  if (m){ const r = m.getBoundingClientRect(); sparkle(r.left + r.width/2, r.top + r.height/2, gift ? '🎁' : '⭐'); m.classList.remove('active'); m.classList.add('gone'); }
+  updateProgress();
+  if (filledCount === zones.length) setTimeout(celebrate, 900);
+}
+
+/* ---------------- Questions ---------------- */
+const randInt = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const sgn = s => s === 'p' ? 1 : -1;
+const catOf = (sa,sb) => sa==='p' && sb==='p' ? 'pos' : sa==='n' && sb==='n' ? 'neg' : 'mix';
+const fmt = n => n < 0 ? '−' + Math.abs(n) : String(n);
+
+function allTypes(useSettings = true){
+  const out = [];
+  for (const op of Object.keys(OPS)){
+    if (useSettings && !settings.ops[op]) continue;
+    for (const pat of ['pp','pn','np','nn']){
+      const sa = pat[0], sb = pat[1];
+      if (useSettings && !settings.cats[catOf(sa,sb)]) continue;
+      const ords = (op==='add'||op==='sub') ? ['>','<'] : ['-'];
+      for (const ord of ords) out.push({op, sa, sb, ord, key:`${op}|${sa}${sb}|${ord}`});
+    }
+  }
+  return out;
+}
+function resultSign(t){
+  if (t.op==='mul'||t.op==='div') return t.sa===t.sb ? '+' : '−';
+  const eb = t.op==='sub' ? (t.sb==='p'?'n':'p') : t.sb;
+  const s = t.sa===eb ? t.sa : (t.ord==='>' ? t.sa : eb);
+  return s==='p' ? '+' : '−';
+}
+function typeLabel(key){
+  const [op, pat, ord] = key.split('|');
+  const t = {op, sa:pat[0], sb:pat[1], ord};
+  const s = x => x==='p' ? '(+)' : '(−)';
+  let l = `${s(t.sa)} ${OPS[op]} ${s(t.sb)}`;
+  if (ord==='>') l += ', 1st bigger'; else if (ord==='<') l += ', 2nd bigger';
+  return l + ` → answer ${resultSign(t)}`;
+}
+
+let pending = {}, lastQKey = '', q = null, qStart = 0, answer = '';  // pending: retry type per operation after a miss
+function pickType(op){
+  if (pending[op]) return pending[op];
+  let types = allTypes().filter(t => t.op === op); if (!types.length) types = allTypes(false).filter(t => t.op === op);
+  const recent = attempts.slice(-500);
+  // lean toward types she's been missing lately
+  const ws = types.map(t => {
+    const r = recent.filter(x => x.k === t.key).slice(-10);
+    const acc = r.length ? r.filter(x => x.ok).length / r.length : 0.6;
+    return 1 + 3*(1-acc);
+  });
+  let x = Math.random() * ws.reduce((a,b)=>a+b, 0);
+  for (let i=0;i<types.length;i++){ x -= ws[i]; if (x <= 0) return types[i]; }
+  return types[types.length-1];
+}
+function gen(t){
+  let a, b, ans;
+  for (let tries=0; tries<40; tries++){
+    if (t.op==='add' || t.op==='sub'){
+      const big = randInt(2, settings.addMax), small = randInt(1, big-1);
+      const ma = t.ord==='>' ? big : small, mb = t.ord==='>' ? small : big;
+      a = ma*sgn(t.sa); b = mb*sgn(t.sb); ans = t.op==='add' ? a+b : a-b;
+    } else if (t.op==='mul'){
+      a = randInt(1, settings.mulMax)*sgn(t.sa); b = randInt(1, settings.mulMax)*sgn(t.sb); ans = a*b;
+    } else {
+      const d = randInt(1, settings.mulMax), qq = randInt(1, settings.mulMax);
+      a = d*qq*sgn(t.sa); b = d*sgn(t.sb); ans = a/b;
+    }
+    if (`${t.op}${a},${b}` !== lastQKey) break;
+  }
+  lastQKey = `${t.op}${a},${b}`;
+  return Object.assign({}, t, {a, b, ans});
+}
+function newQuestion(){
+  q = gen(pickType(qctx.op));
+  $('#qText').textContent = `${fmt(q.a)} ${OPS[q.op]} ${q.b<0 ? '(' + fmt(q.b) + ')' : fmt(q.b)} = ?`;
+  answer = ''; renderAnswer(); qStart = performance.now();
+}
+function renderAnswer(){
+  const box = $('#ansBox');
+  box.textContent = answer === '' ? '?' : answer.replace('-', '−');
+  box.classList.toggle('empty', answer === '');
+}
+/* A question context says which operation to ask and what happens on success:
+   {op, bonus, happyBonus, intro, introCls, onOpen, onClose, onCorrect, onWrong, onStreak5} */
+let qctx = null;
+function openQuestion(ctx){
+  ac();
+  qctx = ctx;
+  if (ctx.onOpen) ctx.onOpen();
+  setMsg(pending[ctx.op] ? 'Let’s try one like the last one:' : ctx.intro || '', pending[ctx.op] ? '' : ctx.introCls || '');
+  newQuestion();
+  $('#qOverlay').classList.remove('hidden');
+}
+function closeQuestion(){
+  $('#qOverlay').classList.add('hidden');
+  if (qctx && qctx.onClose) qctx.onClose();
+  qctx = null; q = null;
+}
+function setMsg(t, cls){ const m = $('#qMsg'); m.textContent = t; m.className = cls; }
+let busy = false;
+function check(){
+  if (!q || busy || answer === '' || answer === '-') return;
+  const given = parseInt(answer, 10), ms = Math.round(performance.now() - qStart);
+  const ok = given === q.ans;
+  recordAttempt(q, given, ms, ok);
+  if (ok){
+    delete pending[q.op];
+    const ctx = qctx;
+    const {earned, notes, newBest} = rewardCorrect(q.op, ms, {bonus: ctx.bonus, happyBonus: ctx.happyBonus});
+    setMsg(`Yes! +${earned} ⭐ ${notes.join(' ')}`, 'good');
+    busy = true;
+    setTimeout(() => {
+      busy = false; closeQuestion(); ctx.onCorrect();
+      afterCorrect(newBest, ctx.onStreak5);
+    }, 650);
+  } else {
+    pending[q.op] = {op: q.op, sa: q.sa, sb: q.sb, ord: q.ord, key: q.key};
+    penalizeWrong();
+    if (qctx.onWrong) qctx.onWrong();
+    const card = $('#qCard'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    setMsg(`Not quite: ${$('#qText').textContent.replace('?', fmt(q.ans))}. Try this one!`, 'bad');
+    newQuestion();
+  }
+}
+function recordAttempt(qq, given, ms, ok, extra){
+  attempts.push(Object.assign({ts: Date.now(), k: qq.key, op: qq.op, cat: catOf(qq.sa, qq.sb), a: qq.a, b: qq.b, ans: qq.ans, given, ok, ms}, extra));
+  if (attempts.length > 20000) attempts = attempts.slice(-20000);
+  save(LS_ATT, attempts);
+}
+// stars: 1 per answer, x3 on golden bubbles, +1 for speedy answers, +1 while on a 5+ streak, +1 for a happy pet
+function rewardCorrect(op, ms, opts = {}){
+  streak++;
+  let earned = 1; const notes = [];
+  if (opts.bonus){ earned *= 3; notes.push('🌟×3'); }
+  if (ms < (op === 'add' || op === 'sub' ? 8000 : 5000)){ earned += 1; notes.push('⚡ Speedy!'); }
+  if (streak >= 5){ earned += 1; notes.push('🔥 Streak!'); }
+  if (opts.happyBonus){ earned += 1; notes.push('😊 Happy pet!'); }
+  game.stars += earned;
+  let newBest = false;
+  if (streak > game.best){ game.best = streak; if (streak >= 3 && !bestToasted){ newBest = true; bestToasted = true; } }
+  saveGame(); updateHud(); happySound();
+  return {earned, notes, newBest};
+}
+function penalizeWrong(){ streak = 0; bestToasted = false; updateHud(); sadSound(); }
+function afterCorrect(newBest, onStreak5){
+  if (streak % 5 === 0) onStreak5();
+  else if (newBest) toast(`🏆 New best streak: ${streak}!`);
+  else if (streak === 3) toast('🔥 3 in a row!');
+  checkDailyGoal();
+  // every 15 answers, tell her if she's improving
+  if (attempts.length % 15 === 0){ const n = kidProgressNote(); if (n) setTimeout(() => toast(n), 2600); }
+}
+// kid-facing improvement message: last 20 answers vs everything before them
+function kidProgressNote(list = attempts){
+  if (list.length < 40) return null;
+  const recent = summarize(list.slice(-20)), before = summarize(list.slice(0, -20));
+  if (before.avg - recent.avg >= 0.3) return `⚡ You’re ${(before.avg - recent.avg).toFixed(1)}s faster than your average!`;
+  if (recent.acc - before.acc >= 0.05) return `🎯 You’re getting more accurate: ${pct(recent.acc)} lately!`;
+  return null;
+}
+let streak = 0, bestToasted = false;
+const game = Object.assign({stars: 0, best: 0, pictures: 0, ttBest: 0}, load(LS_GAME, {}));
+const saveGame = () => save(LS_GAME, game);
+function updateHud(){
+  $('#stars').textContent = `⭐ ${game.stars}`;
+  $('#streak').innerHTML = `🔥 ${streak} <small>best ${game.best}</small>`;
+}
+function toast(t){
+  // in times-table mode, messages go in the side panel so nothing floats over the question
+  const el = settings.theme === 'tt' ? $('#ttFeed') : $('#toast'); el.textContent = t; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); }
+
+/* keypad */
+const pad = $('#pad');
+['7','8','9','4','5','6','1','2','3','±','0','⌫'].forEach(k => {
+  const b = document.createElement('button'); b.textContent = k; b.dataset.k = k;
+  if (k==='±') { b.className = 'minus'; b.textContent = '+/−'; }
+  pad.appendChild(b);
+});
+function press(k){
+  if (busy) return;
+  if (k === '±' || k === '-') answer = answer.startsWith('-') ? answer.slice(1) : '-' + answer;
+  else if (k === '⌫') answer = answer.slice(0, -1);
+  else if (/^\d$/.test(k) && answer.replace('-', '').length < 5) answer += k;
+  renderAnswer();
+}
+pad.addEventListener('click', e => { const b = e.target.closest('button'); if (b) press(b.dataset.k); });
+$('#checkBtn').addEventListener('click', check);
+$('#qClose').addEventListener('click', closeQuestion);
+document.addEventListener('keydown', e => {
+  const anyOverlay = [...document.querySelectorAll('.overlay')].some(o => !o.classList.contains('hidden'));
+  if (settings.theme === 'tt' && !anyOverlay){
+    if (/^\d$/.test(e.key)) { ttPress(e.key); return; }
+    if (e.key === 'Backspace'){ e.preventDefault(); ttPress('⌫'); return; }
+    if (e.key === 'Enter'){ e.preventDefault(); if (!tt.running || tt.paused) $('#ttOvBtn').click(); else ttPress('✔'); return; }
+    if (e.key === 'Escape' || e.key === 'p'){ if (tt.paused) ttResume(); else ttPause(); return; }
+  }
+  if ($('#qOverlay').classList.contains('hidden')) {
+    if (e.key === 'Escape') document.querySelectorAll('.overlay').forEach(o => { if (o.id !== 'winOverlay' && o.id !== 'hatchOverlay') o.classList.add('hidden'); });
+    return;
+  }
+  if (/^\d$/.test(e.key)) press(e.key);
+  else if (e.key === '-' || e.key === '−' || e.key === '_') press('-');
+  else if (e.key === 'Backspace') { e.preventDefault(); press('⌫'); }
+  else if (e.key === 'Enter') { e.preventDefault(); check(); }
+  else if (e.key === 'Escape') closeQuestion();
+});
+
+function zoneCtx(i){
+  const z = zones[i], marker = () => svg.querySelector(`.marker[data-i="${i}"]`);
+  return {
+    op: z.op, bonus: z.bonus,
+    intro: z.bonus ? '🌟 Golden bubble: triple stars!' : '', introCls: z.bonus ? 'good' : '',
+    onOpen(){ svg.querySelectorAll('.marker.active').forEach(g => g.classList.remove('active')); marker().classList.add('active'); },
+    onClose(){ const m = marker(); if (m) m.classList.remove('active'); },
+    onCorrect(){ fillZone(i); },
+    onStreak5(){
+      const left = zones.map((zz, k) => zz.filled ? -1 : k).filter(k => k >= 0);
+      toast(`🔥 ${streak} in a row! ${left.length ? 'Free piece! 🎁' : ''}`);
+      if (left.length) setTimeout(() => { giftSound(); fillZone(left[Math.floor(Math.random()*left.length)], true); }, 700);
+    }
+  };
+}
+svg.addEventListener('click', e => {
+  const g = e.target.closest('.marker'); if (!g) return;
+  const i = +g.dataset.i; if (zones[i].filled) return;
+  openQuestion(zoneCtx(i));
+});
+
+/* daily goal: correct answers today across every mode */
+const DAILY_GOAL = 20;
+const correctToday = () => { const mid = new Date(); mid.setHours(0, 0, 0, 0); const t = mid.getTime(); return attempts.filter(a => a.ok && a.ts >= t).length; };
+function checkDailyGoal(){
+  const today = dayKey(Date.now());
+  if (game.goalDay !== today && correctToday() >= DAILY_GOAL){
+    game.goalDay = today; game.stars += 15; saveGame(); updateHud();
+    setTimeout(() => { giftSound(); toast('🎯 Daily goal reached! +15 ⭐'); }, 1600);
+  }
+  if (settings.theme === 'pet') renderGoal();
+}
+
+/* ---------------- Celebration ---------------- */
+function confetti(){
+  const cols = ['#ff6b6b','#ffa94d','#ffe066','#69db7c','#74c0fc','#b197fc','#ff8fb1'];
+  for (let i=0;i<90;i++){
+    const c = document.createElement('div'); c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw'; c.style.background = cols[i % cols.length];
+    c.style.animationDuration = (2 + Math.random()*2) + 's'; c.style.animationDelay = Math.random()*0.6 + 's';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 5000);
+  }
+}
+function celebrate(){
+  fanfare(); confetti();
+  game.pictures++; game.stars += 10; saveGame(); updateHud();
+  $('#winEmoji').textContent = scene.emoji;
+  $('#winTitle').textContent = `It was a ${scene.name}! You revealed it!`;
+  const today = dayKey(Date.now()), td = attempts.filter(a => dayKey(a.ts) === today);
+  $('#winSub').textContent = `+10 ⭐ picture bonus! Today: ${td.filter(a=>a.ok).length} correct out of ${td.length} questions. Pictures finished: ${game.pictures}. ${kidProgressNote() || ''}`;
+  $('#winOverlay').classList.remove('hidden');
+}
+/* ---------------- Modes ---------------- */
+let sceneTheme = null; // which picture theme the current picture was built for
+const confirmNew = () => !(filledCount > 0 && filledCount < zones.length) || confirm('Start a new picture? This one isn’t finished yet.');
+$('#againBtn').addEventListener('click', () => { $('#winOverlay').classList.add('hidden'); buildScene(); });
+$('#newBtn').addEventListener('click', () => { if (confirmNew()) buildScene(); });
+const syncTheme = () => document.querySelectorAll('[data-theme]').forEach(b => b.classList.toggle('on', b.dataset.theme === settings.theme));
+function applyMode(){
+  const t = settings.theme;
+  document.body.classList.toggle('mode-pet', t === 'pet');
+  document.body.classList.toggle('mode-tt', t === 'tt');
+  syncTheme();
+  if (t !== 'tt') ttPause();
+  if (t === 'pet'){ applyDecay(); renderPetView(true); }
+  else if (t === 'tt'){ ttRenderSide(); ttDirty = true; }
+  else if (sceneTheme !== t) buildScene();
+}
+document.querySelectorAll('[data-theme]').forEach(b => b.addEventListener('click', () => {
+  const t = b.dataset.theme;
+  if (t === settings.theme) return;
+  // leaving for the pet or times tables keeps the current picture; switching to the other picture type replaces it
+  if ((t === 'animals' || t === 'mandala') && sceneTheme && sceneTheme !== t && !confirmNew()) return;
+  settings.theme = t; saveSettings(); applyMode();
+}));
+
+/* ---------------- Pet ---------------- */
+const LS_PET = 'mpm_pet_v1';
+const pet = Object.assign({stage: 'egg', warm: 0, name: '', color: '#ffb3cf', xp: 0,
+  needs: {food: 80, fun: 80, energy: 80, clean: 80}, last: Date.now(),
+  owned: ['park'], hat: '', face: '', bg: 'park'}, load(LS_PET, {}));
+const savePet = () => save(LS_PET, pet);
+const DECAY = {food: 8, fun: 7, energy: 5, clean: 6};          // points lost per hour
+const NEED_INFO = {food: ['🍎', 'Food'], fun: ['🎈', 'Fun'], energy: ['⚡', 'Energy'], clean: ['🫧', 'Clean']};
+const ACTIONS = {
+  feed:  {icon: '🍎', label: 'Feed', need: 'food', amt: 30, float: '🍎', verb: n => `feed ${n}`, say: ['Yum yum!', 'Delicious!', 'So tasty!', 'Munch munch!']},
+  play:  {icon: '🎈', label: 'Play', need: 'fun', amt: 30, float: '🎈', verb: n => `play with ${n}`, say: ['Wheee!', 'That was fun!', 'Again, again!', 'You’re the best!']},
+  wash:  {icon: '🛁', label: 'Bath', need: 'clean', amt: 35, float: '🫧', verb: n => `give ${n} a bath`, say: ['Squeaky clean!', 'Bubbles!', 'So fresh!']},
+  sleep: {icon: '💤', label: 'Nap', need: 'energy', amt: 35, float: '💤', verb: n => `help ${n} nap`, say: ['Zzz… all rested!', 'What a nice nap!', '*yawn* I feel great!']},
+};
+const NEED_SAY = {food: 'I’m hungry! 🍎', fun: 'Let’s play! 🎈', energy: 'I’m so sleepy… 💤', clean: 'I need a bath! 🛁'};
+const HAPPY_SAY = ['I love doing math with you!', 'You’re so smart!', 'Best day ever!', 'Hehe! 💕', 'Let’s solve another one!', 'I’m so happy!'];
+const POKE_SAY = ['Hehe! That tickles!', 'Hi there! 👋', 'I like you!', 'Boop!', 'Let’s do math!'];
+const STAGES = [{min: 0, name: 'Baby', s: .66}, {min: 30, name: 'Kid', s: .78}, {min: 80, name: 'Teen', s: .9}, {min: 150, name: 'Grown-up', s: 1}];
+const PET_COLORS = ['#ffb3cf', '#9fd3ff', '#a8e6c1', '#c9b3ff', '#ffe08a', '#ffc09f'];
+const stageIdx = () => { let i = 0; STAGES.forEach((s, k) => { if (pet.xp >= s.min) i = k; }); return i; };
+const petLevel = () => 1 + Math.floor(pet.xp / 10);
+const avgNeeds = () => (pet.needs.food + pet.needs.fun + pet.needs.energy + pet.needs.clean) / 4;
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+const emo = (e, x, y, s) => `<text x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central">${e}</text>`;
+const skyGrad = (a, b) => `<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="400" height="340" fill="url(#sky)"/>`;
+const BGS = {
+  park:   {name: 'Park', icon: '🌳', price: 0,  svg: skyGrad('#bfe6ff', '#eaf8ff') + '<ellipse cx="200" cy="335" rx="330" ry="70" fill="#9be07a"/>' + emo('☁️', 300, 60, 44) + emo('🌳', 55, 240, 80) + emo('🌼', 350, 305, 28)},
+  beach:  {name: 'Beach', icon: '🏖️', price: 25, svg: skyGrad('#8fd3ff', '#d9f2ff') + '<rect y="215" width="400" height="50" fill="#4fc3f7"/><ellipse cx="200" cy="340" rx="330" ry="80" fill="#ffe2a8"/>' + emo('☀️', 345, 55, 48) + emo('🌴', 50, 225, 85) + emo('🐚', 345, 312, 26)},
+  candy:  {name: 'Candy Land', icon: '🍭', price: 35, svg: skyGrad('#ffe0f0', '#fff5fa') + '<ellipse cx="200" cy="335" rx="330" ry="70" fill="#ffc2dc"/>' + emo('🍭', 55, 245, 64) + emo('🧁', 345, 250, 44) + emo('🍬', 330, 312, 28) + emo('☁️', 120, 55, 40)},
+  space:  {name: 'Space', icon: '🚀', price: 40, svg: skyGrad('#1b1446', '#3b2a7a') + '<ellipse cx="200" cy="340" rx="330" ry="75" fill="#8c7bc4"/>' + emo('🪐', 70, 70, 54) + emo('⭐', 320, 45, 22) + emo('✨', 250, 110, 22) + emo('🌙', 345, 115, 34) + emo('🚀', 345, 250, 40)},
+  castle: {name: 'Castle', icon: '🏰', price: 60, svg: skyGrad('#ffd6e7', '#fff0f6') + '<ellipse cx="200" cy="335" rx="330" ry="70" fill="#b8ecb0"/>' + emo('🏰', 65, 225, 90) + emo('🌈', 330, 75, 64) + emo('🦄', 350, 280, 36)},
+};
+const SHOP = [
+  {id: 'cake',  type: 'treat', icon: '🍰', name: 'Cake',        price: 8,  eff: {food: 40, fun: 10}, say: 'Cake!! Yummy!'},
+  {id: 'teddy', type: 'treat', icon: '🧸', name: 'Teddy',       price: 8,  eff: {fun: 45},           say: 'A teddy! I love it!'},
+  {id: 'soap',  type: 'treat', icon: '🧼', name: 'Bubble bath', price: 6,  eff: {clean: 50},         say: 'So many bubbles!'},
+  {id: 'cocoa', type: 'treat', icon: '☕', name: 'Cocoa',       price: 6,  eff: {energy: 40},        say: 'Warm and cozy!'},
+  {id: 'bow',   type: 'hat',   icon: '🎀', name: 'Bow',         price: 15},
+  {id: 'flower',type: 'hat',   icon: '🌸', name: 'Flower',      price: 20},
+  {id: 'cap',   type: 'hat',   icon: '🧢', name: 'Cap',         price: 25},
+  {id: 'tophat',type: 'hat',   icon: '🎩', name: 'Top hat',     price: 40},
+  {id: 'crown', type: 'hat',   icon: '👑', name: 'Crown',       price: 80},
+  {id: 'specs', type: 'face',  icon: '👓', name: 'Glasses',     price: 30},
+  {id: 'shades',type: 'face',  icon: '🕶️', name: 'Sunglasses',  price: 35},
+  ...Object.entries(BGS).map(([id, b]) => ({id, type: 'bg', icon: b.icon, name: b.name, price: b.price})),
+];
+const shopItem = id => SHOP.find(s => s.id === id);
+
+let actionOps = {};
+// prefer an operation that no other button is showing, and never the same one twice in a row
+function newActionOp(prev, key){
+  const ops = enabledOps(), others = Object.entries(actionOps).filter(([k]) => k !== key && k !== 'warm').map(([, o]) => o);
+  const fresh = ops.filter(o => o !== prev && !others.includes(o)), notPrev = ops.filter(o => o !== prev);
+  return pick(fresh.length ? fresh : notPrev.length ? notPrev : ops);
+}
+function assignActionOps(){
+  let bag = [];
+  ['feed', 'play', 'wash', 'sleep', 'warm'].forEach(k => { if (!bag.length) bag = shuffle([...enabledOps()]); actionOps[k] = bag.pop(); });
+}
+
+function applyDecay(){
+  const now = Date.now();
+  if (pet.stage === 'pet'){
+    const h = Math.max(0, (now - pet.last) / 3.6e6);
+    for (const k in DECAY) pet.needs[k] = Math.max(0, pet.needs[k] - DECAY[k]*h);
+  }
+  pet.last = now; savePet();
+}
+
+let sleepingUntil = 0, excitedUntil = 0, sayText = '', sayUntil = 0, petKey = '';
+function petMood(){
+  const now = Date.now(), n = pet.needs;
+  if (sleepingUntil > now) return 'sleeping';
+  if (excitedUntil > now) return 'excited';
+  if (n.energy < 20) return 'sleepy';
+  const lo = Math.min(n.food, n.fun, n.energy, n.clean);
+  if (avgNeeds() >= 65 && lo >= 35) return 'happy';
+  if (avgNeeds() >= 40 && lo >= 20) return 'ok';
+  return 'sad';
+}
+function petSVG(){
+  const st = STAGES[stageIdx()], si = stageIdx(), c = pet.color, mood = petMood(), ink = '#5b4a5e';
+  let h = BGS[pet.bg].svg + '<ellipse cx="200" cy="294" rx="70" ry="10" fill="#000" opacity=".12"/>';
+  if (pet.stage === 'egg'){
+    const cracks = ['M168,168 l10,10 l-6,10 l10,8', 'M228,160 l-8,12 l8,8 l-6,12', 'M196,142 l4,14 l-6,10', 'M146,215 l14,4 l6,-10 l12,6', 'M244,214 l12,6 l-4,12 l10,6'];
+    h += `<g class="egg"><ellipse cx="200" cy="215" rx="62" ry="78" fill="#fff8e7" stroke="${ink}" stroke-width="3"/>` +
+      dot(175, 200, 9, '#ffc2dc') + dot(228, 180, 12, '#bfe3ff') + dot(214, 250, 10, '#c9f2d4') + dot(170, 255, 7, '#ffe08a') + dot(200, 160, 6, '#d9ccff') +
+      cracks.slice(0, pet.warm).map(d => ln(d, 3, ink)).join('') + '</g>';
+    return h;
+  }
+  const eyeL = 168, eyeR = 232, ey = 200;
+  let eyes;
+  if (mood === 'excited') eyes = ln(`M${eyeL-10},${ey+4} Q${eyeL},${ey-10} ${eyeL+10},${ey+4} M${eyeR-10},${ey+4} Q${eyeR},${ey-10} ${eyeR+10},${ey+4}`, 4.5, '#3a2e39');
+  else if (mood === 'sleeping') eyes = ln(`M${eyeL-10},${ey} Q${eyeL},${ey+9} ${eyeL+10},${ey} M${eyeR-10},${ey} Q${eyeR},${ey+9} ${eyeR+10},${ey}`, 4, '#3a2e39');
+  else if (mood === 'sleepy') eyes = ln(`M${eyeL-10},${ey+2} L${eyeL+10},${ey+2} M${eyeR-10},${ey+2} L${eyeR+10},${ey+2}`, 4.5, '#3a2e39') + ln(`M${eyeL-8},${ey+7} Q${eyeL},${ey+11} ${eyeL+8},${ey+7} M${eyeR-8},${ey+7} Q${eyeR},${ey+11} ${eyeR+8},${ey+7}`, 2.5, '#3a2e39');
+  else {
+    eyes = `<g class="blink">` + [eyeL, eyeR].map(x => `<ellipse cx="${x}" cy="${ey}" rx="10" ry="13" fill="#3a2e39"/>` + dot(x-3.5, ey-5, 4, '#fff') + dot(x+3, ey+4, 1.8, '#fff')).join('') + `</g>`;
+    if (mood === 'sad') eyes += ln(`M${eyeL-12},${ey-22} L${eyeL+8},${ey-16} M${eyeR+12},${ey-22} L${eyeR-8},${ey-16}`, 3.5, '#3a2e39');
+  }
+  let mouth;
+  if (mood === 'happy' || mood === 'excited') mouth = `<path d="M184,228 Q200,250 216,228 Z" fill="#7a2e3e" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M193,238 Q200,233 207,238 Q204,244 200,244 Q196,244 193,238 Z" fill="#ff8fab"/>`;
+  else if (mood === 'sad') mouth = ln('M187,240 Q200,228 213,240', 3.5);
+  else if (mood === 'sleeping') mouth = `<ellipse cx="200" cy="234" rx="5" ry="6" fill="#7a2e3e"/>`;
+  else mouth = ln('M188,232 Q200,242 212,232', 3.5);
+  const body = `stroke="${ink}" stroke-width="3"`;
+  let g = '';
+  if (si >= 3) g += `<ellipse cx="118" cy="185" rx="30" ry="46" fill="#fff" opacity=".85" stroke="${ink}" stroke-width="2" transform="rotate(-30 118 185)"/><ellipse cx="282" cy="185" rx="30" ry="46" fill="#fff" opacity=".85" stroke="${ink}" stroke-width="2" transform="rotate(30 282 185)"/>`;
+  if (si >= 2) g += `<path d="M276,252 Q330,244 322,200 Q344,214 334,248 Q322,274 280,268 Z" fill="${c}" ${body}/>`;
+  if (si >= 1) g += `<path d="M138,168 Q118,100 182,138 Z" fill="${c}" ${body}/><path d="M262,168 Q282,100 218,138 Z" fill="${c}" ${body}/>` +
+    `<path d="M144,156 Q134,122 166,140 Z" fill="#ffc7d9"/><path d="M256,156 Q266,122 234,140 Z" fill="#ffc7d9"/>`;
+  g += `<ellipse cx="160" cy="287" rx="22" ry="10" fill="${c}" ${body}/><ellipse cx="240" cy="287" rx="22" ry="10" fill="${c}" ${body}/>`;
+  g += `<ellipse cx="200" cy="215" rx="85" ry="75" fill="${c}" ${body}/>`;
+  g += `<ellipse cx="200" cy="248" rx="48" ry="33" fill="#fff" opacity=".55"/>`;
+  g += `<ellipse cx="119" cy="236" rx="12" ry="20" fill="${c}" ${body} transform="rotate(20 119 236)"/><ellipse cx="281" cy="236" rx="12" ry="20" fill="${c}" ${body} transform="rotate(-20 281 236)"/>`;
+  g += `<ellipse cx="148" cy="224" rx="13" ry="8" fill="#ff9ebd" opacity=".7"/><ellipse cx="252" cy="224" rx="13" ry="8" fill="#ff9ebd" opacity=".7"/>`;
+  g += eyes + mouth;
+  if (pet.needs.clean < 30) g += dot(160, 255, 6, '#8a6a4a') + dot(238, 185, 5, '#8a6a4a') + dot(250, 260, 7, '#8a6a4a') +
+    ln('M110,150 q6,-8 0,-16 q-6,-8 0,-16 M292,150 q6,-8 0,-16 q-6,-8 0,-16', 3, '#8bc34a') + emo('🪰', 300, 115, 22);
+  if (pet.face){
+    // drawn to sit exactly on the eyes (emoji glasses don't line up)
+    const dark = pet.face === 'shades', fr = '#2b2233';
+    const lens = dark ? `fill="${fr}" fill-opacity=".92"` : 'fill="#d8f1ff" fill-opacity=".35"';
+    g += `<rect x="${eyeL-23}" y="${ey-17}" width="46" height="34" rx="13" ${lens} stroke="${fr}" stroke-width="4"/>` +
+      `<rect x="${eyeR-23}" y="${ey-17}" width="46" height="34" rx="13" ${lens} stroke="${fr}" stroke-width="4"/>` +
+      ln(`M${eyeL+23},${ey-6} Q200,${ey-14} ${eyeR-23},${ey-6} M${eyeL-23},${ey-6} L${eyeL-44},${ey-14} M${eyeR+23},${ey-6} L${eyeR+44},${ey-14}`, 4, fr) +
+      (dark ? ln(`M${eyeL-14},${ey-8} l12,-5 M${eyeR-14},${ey-8} l12,-5`, 3, '#ffffff99') : '');
+  }
+  if (pet.hat) g += pet.hat === 'bow' ? emo('🎀', 246, 150, 46) : emo(shopItem(pet.hat).icon, 200, 132, 62);
+  h += `<g transform="translate(200 294) scale(${st.s}) translate(-200 -294)"><g class="petbody">${g}</g></g>`;
+  if (mood === 'sleeping' || mood === 'sleepy') h += `<g class="zzz">${emo('💤', 300, 120, 34)}</g>`;
+  return h;
+}
+function renderPet(force){
+  const key = [pet.stage, pet.warm, pet.color, pet.bg, pet.hat, pet.face, stageIdx(), petMood(), pet.needs.clean < 30].join('|');
+  if (!force && key === petKey) return;
+  petKey = key;
+  $('#petSvg').innerHTML = petSVG();
+}
+function renderSpeech(){
+  let t;
+  if (sayUntil > Date.now()) t = sayText;
+  else if (pet.stage === 'egg') t = pet.warm ? 'Something is wiggling inside…' : 'Solve questions to warm the egg! 🥚';
+  else {
+    const low = Object.keys(pet.needs).sort((a, b) => pet.needs[a] - pet.needs[b])[0];
+    t = pet.needs[low] < 35 ? NEED_SAY[low] : HAPPY_SAY[Math.floor(Date.now() / 9000) % HAPPY_SAY.length];
+  }
+  $('#speech').textContent = t;
+}
+function say(t, ms){ sayText = t; sayUntil = Date.now() + ms; renderSpeech(); setTimeout(renderSpeech, ms + 50); }
+function renderNeeds(){
+  if (pet.stage === 'egg'){
+    $('#needs').innerHTML = `<div class="need wide">🥚 Warmth <div class="bar"><div class="fill" style="width:${pet.warm*20}%;background:linear-gradient(90deg,#ffd34d,#ff8c42)"></div></div> ${pet.warm}/5</div>`;
+    return;
+  }
+  $('#needs').innerHTML = Object.entries(NEED_INFO).map(([k, [ico, label]]) => {
+    const v = Math.round(pet.needs[k]), col = v >= 60 ? '#5fd38d' : v >= 30 ? '#ffc94d' : '#ff6b6b';
+    return `<div class="need" title="${label}">${ico} <div class="bar"><div class="fill" style="width:${v}%;background:${col}"></div></div></div>`;
+  }).join('');
+}
+const actBtn = (k, ico, label, low) => `<button class="act${low ? ' low' : ''}" data-act="${k}"><span class="opb" style="background:${OP_COLORS[actionOps[k]][1]}">${OPS[actionOps[k]]}</span><span class="ico">${ico}</span>${label}</button>`;
+function renderActions(){
+  const box = $('#actions');
+  if (pet.stage === 'egg'){ box.className = 'actions egg'; box.innerHTML = actBtn('warm', '🔥', 'Warm the egg'); return; }
+  box.className = 'actions';
+  box.innerHTML = Object.entries(ACTIONS).map(([k, a]) => actBtn(k, a.icon, a.label, pet.needs[a.need] < 35)).join('');
+}
+function renderInfo(){
+  if (pet.stage === 'egg'){ $('#petName').textContent = 'Mystery egg'; $('#petLevel').textContent = ''; $('#xpFill').style.width = (pet.warm*20) + '%'; return; }
+  $('#petName').textContent = pet.name;
+  $('#petLevel').textContent = `Lv ${petLevel()} · ${STAGES[stageIdx()].name}`;
+  $('#xpFill').style.width = ((pet.xp % 10) * 10) + '%';
+}
+function renderGoal(){
+  const n = Math.min(DAILY_GOAL, correctToday());
+  $('#goalFill').style.width = (100*n/DAILY_GOAL) + '%';
+  $('#goalText').textContent = n >= DAILY_GOAL ? 'Done! 🎉' : `${n}/${DAILY_GOAL}`;
+}
+function renderPetView(force){ renderPet(force); renderSpeech(); renderNeeds(); renderActions(); renderInfo(); renderGoal(); }
+function jump(){ const b = $('#petSvg .petbody'); if (!b) return; b.classList.remove('jump'); void b.getBoundingClientRect(); b.classList.add('jump'); }
+function floaty(ch, fromEl){
+  const a = fromEl ? fromEl.getBoundingClientRect() : null, p = $('#petSvg').getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'floaty'; f.textContent = ch;
+  f.style.left = (a ? a.left + a.width/2 : p.left + p.width/2) + 'px'; f.style.top = (a ? a.top : p.bottom) + 'px';
+  document.body.appendChild(f);
+  requestAnimationFrame(() => requestAnimationFrame(() => { f.style.left = (p.left + p.width/2) + 'px'; f.style.top = (p.top + p.height*0.6) + 'px'; f.style.opacity = '0'; f.style.transform = 'translate(-50%,-50%) scale(1.6)'; }));
+  setTimeout(() => f.remove(), 900);
+}
+function actionCtx(k){
+  const egg = k === 'warm';
+  return {
+    op: actionOps[k],
+    happyBonus: !egg && avgNeeds() >= 70,
+    intro: egg ? '🔥 Solve it to warm the egg!' : `${ACTIONS[k].icon} Solve it to ${ACTIONS[k].verb(pet.name)}!`,
+    onCorrect(){ doAction(k); },
+    onWrong(){ say('Oops! You can do it! 💪', 3500); },
+    onStreak5(){ game.stars += 5; saveGame(); updateHud(); giftSound(); toast(`🔥 ${streak} in a row! +5 ⭐ bonus`); }
+  };
+}
+function doAction(k){
+  const btn = document.querySelector(`[data-act="${k}"]`);
+  actionOps[k] = newActionOp(actionOps[k], k);
+  if (k === 'warm'){
+    floaty('🔥', btn); pet.warm = Math.min(5, pet.warm + 1); savePet();
+    say(['*wiggle wiggle*', '*crack!*', 'Something is moving!', 'Almost there!', 'It’s hatching!!'][pet.warm - 1], 2500);
+    renderPetView();
+    if (pet.warm >= 5) setTimeout(openHatch, 1200);
+    return;
+  }
+  const a = ACTIONS[k], oldStage = stageIdx(), oldLvl = petLevel();
+  applyDecay();
+  pet.needs[a.need] = Math.min(100, pet.needs[a.need] + a.amt);
+  if (k === 'play') pet.needs.energy = Math.max(0, pet.needs.energy - 5);
+  pet.xp += streak >= 5 ? 2 : 1;
+  savePet();
+  floaty(a.float, btn);
+  if (k === 'sleep'){ sleepingUntil = Date.now() + 3500; setTimeout(() => renderPet(), 3600); }
+  else { excitedUntil = Date.now() + 1800; setTimeout(() => renderPet(), 1900); }
+  renderPetView(); jump(); say(pick(a.say), 2500);
+  if (stageIdx() !== oldStage){ setTimeout(() => { fanfare(); confetti(); toast(`✨ ${pet.name} grew into a ${STAGES[stageIdx()].name}!`); renderPet(true); }, 900); }
+  else if (petLevel() > oldLvl) setTimeout(() => { giftSound(); toast(`⬆️ ${pet.name} reached level ${petLevel()}!`); }, 900);
+}
+$('#actions').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (b && !busy) openQuestion(actionCtx(b.dataset.act)); });
+$('#petSvg').addEventListener('click', () => {
+  ac();
+  if (pet.stage === 'egg'){ say('*wobble wobble*', 1500); return; }
+  jump(); note(880, 0, .1, 'sine', .12); note(1320, .08, .12, 'sine', .12); say(pick(POKE_SAY), 2000);
+});
+
+/* hatching */
+let hatchColor = PET_COLORS[0];
+function openHatch(){
+  fanfare(); confetti();
+  hatchColor = pick(PET_COLORS);
+  $('#swatches').innerHTML = PET_COLORS.map(c => `<button class="sw${c === hatchColor ? ' on' : ''}" data-c="${c}" style="background:${c}" aria-label="color"></button>`).join('');
+  $('#petNameIn').value = '';
+  $('#hatchOverlay').classList.remove('hidden');
+}
+$('#swatches').addEventListener('click', e => {
+  const b = e.target.closest('[data-c]'); if (!b) return;
+  hatchColor = b.dataset.c; document.querySelectorAll('#swatches .sw').forEach(s => s.classList.toggle('on', s === b));
+});
+$('#hatchBtn').addEventListener('click', () => {
+  pet.name = ($('#petNameIn').value.trim() || 'Mochi').slice(0, 14);
+  pet.color = hatchColor; pet.stage = 'pet'; pet.xp = 0; pet.last = Date.now();
+  pet.needs = {food: 80, fun: 80, energy: 80, clean: 80};
+  savePet(); $('#hatchOverlay').classList.add('hidden');
+  excitedUntil = Date.now() + 2500; setTimeout(() => renderPet(), 2600);
+  renderPetView(true); jump(); happySound(); say(`Hi! I’m ${pet.name}! 💕`, 4000);
+});
+
+/* shop */
+function renderShop(){
+  $('#shopStars').textContent = `⭐ ${game.stars}`;
+  const groups = [['treat', 'Treats'], ['hat', 'Hats'], ['face', 'Glasses'], ['bg', 'Places']];
+  $('#shopBody').innerHTML = groups.map(([type, title]) => `<h3>${title}</h3><div class="shopgrid">` +
+    SHOP.filter(s => s.type === type).map(s => {
+      const owned = type !== 'treat' && pet.owned.includes(s.id);
+      const on = (type === 'hat' && pet.hat === s.id) || (type === 'face' && pet.face === s.id) || (type === 'bg' && pet.bg === s.id);
+      const tag = type === 'treat' ? `${s.price} ⭐` : on ? (type === 'bg' ? 'Here ✓' : 'Wearing ✓') : owned ? (type === 'bg' ? 'Go' : 'Wear') : `${s.price} ⭐`;
+      return `<button class="item${on ? ' on' : ''}${!owned && s.price > game.stars ? ' poor' : ''}" data-item="${s.id}"><span class="ico">${s.icon}</span>${s.name}<small>${tag}</small></button>`;
+    }).join('') + '</div>').join('');
+}
+$('#shopBody').addEventListener('click', e => {
+  const b = e.target.closest('[data-item]'); if (!b) return;
+  const s = shopItem(b.dataset.item), owned = pet.owned.includes(s.id);
+  if (s.type === 'treat' && pet.stage !== 'pet'){ toast('Hatch your egg first! 🥚'); return; }
+  if ((s.type === 'treat' || !owned) && game.stars < s.price){ toast('Need more ⭐ — solve some questions!'); return; }
+  if (s.type === 'treat'){
+    game.stars -= s.price; applyDecay();
+    for (const k in s.eff) pet.needs[k] = Math.min(100, pet.needs[k] + s.eff[k]);
+    excitedUntil = Date.now() + 1800; setTimeout(() => renderPet(), 1900);
+    say(s.say, 2500); happySound();
+  } else {
+    if (!owned){ game.stars -= s.price; pet.owned.push(s.id); giftSound(); }
+    if (s.type === 'bg') pet.bg = s.id;
+    else if (s.type === 'hat') pet.hat = pet.hat === s.id && owned ? '' : s.id;
+    else pet.face = pet.face === s.id && owned ? '' : s.id;
+  }
+  saveGame(); savePet(); updateHud(); renderShop(); renderPetView(); jump();
+});
+$('#shopBtn').addEventListener('click', () => { renderShop(); $('#shopOverlay').classList.remove('hidden'); });
+
+setInterval(() => { applyDecay(); if (settings.theme === 'pet'){ renderPet(); renderSpeech(); renderNeeds(); renderActions(); } }, 15000);
+assignActionOps();
+
+
+/* ---------------- Times-table tetris ---------------- */
+// A piece falls carrying a 0–12 × 0–12 fact. A correct answer drops it into the best spot
+// (found by trying every rotation and column); a wrong answer or a landing drops it where it is.
+const TT_COLS = 10, TT_ROWS = 16, TT_MAX = 12;
+const TT_SHAPES = {I: [[1,1,1,1]], O: [[1,1],[1,1]], T: [[0,1,0],[1,1,1]], S: [[0,1,1],[1,1,0]], Z: [[1,1,0],[0,1,1]], J: [[1,0,0],[1,1,1]], L: [[0,0,1],[1,1,1]]};
+const TT_COLORS = {I: '#74c0fc', O: '#ffd43b', T: '#b197fc', S: '#69db7c', Z: '#ff8787', J: '#5c9dff', L: '#ffa94d'};
+const rotCW = m => m[0].map((_, c) => m.map(r => r[c]).reverse());
+const TT_ROTS = {};
+for (const [k, m] of Object.entries(TT_SHAPES)){
+  const rs = [m];
+  for (let i = 0; i < 3; i++){ const r = rotCW(rs[rs.length - 1]); if (rs.some(o => JSON.stringify(o) === JSON.stringify(r))) break; rs.push(r); }
+  TT_ROTS[k] = rs;
+}
+const tt = {board: [], piece: null, running: false, paused: false, over: false, score: 0, lines: 0, level: 1, correct: 0,
+  answer: '', lastTick: 0, anim: null, queue: [], flash: null, game: [], waiting: false};
+const ttTickMs = () => Math.max(170, 800 * Math.pow(0.88, tt.level - 1));   // ms per row; shrinks every level
+const ttFactKey = (a, b) => `${a}x${b}`;
+const isTTFact = x => x.op === 'mul' && x.a >= 0 && x.b >= 0 && x.a <= TT_MAX && x.b <= TT_MAX;
+
+function ttCollide(m, x, y){
+  for (let r = 0; r < m.length; r++) for (let c = 0; c < m[r].length; c++){
+    if (!m[r][c]) continue;
+    const bx = x + c, by = y + r;
+    if (bx < 0 || bx >= TT_COLS || by >= TT_ROWS) return true;
+    if (by >= 0 && tt.board[by][bx]) return true;
+  }
+  return false;
+}
+function ttEvaluate(board){
+  // weights from a well-known Tetris AI: fewer holes, lower and flatter stacks, more cleared lines
+  let lines = 0;
+  const b = board.filter(row => { const full = row.every(Boolean); if (full) lines++; return !full; });
+  while (b.length < TT_ROWS) b.unshift(Array(TT_COLS).fill(null));
+  const heights = [];
+  let holes = 0;
+  for (let c = 0; c < TT_COLS; c++){
+    let h = 0, seen = false;
+    for (let r = 0; r < TT_ROWS; r++){
+      if (b[r][c]){ if (!seen){ h = TT_ROWS - r; seen = true; } }
+      else if (seen) holes++;
+    }
+    heights.push(h);
+  }
+  const agg = heights.reduce((s, h) => s + h, 0);
+  let bump = 0; for (let c = 0; c < TT_COLS - 1; c++) bump += Math.abs(heights[c] - heights[c+1]);
+  return 0.76*lines - 0.51*agg - 0.36*holes - 0.18*bump;
+}
+function ttBestPlacement(p){
+  let best = null;
+  TT_ROTS[p.type].forEach((m, ri) => {
+    for (let x = 0; x <= TT_COLS - m[0].length; x++){
+      let y = -m.length;
+      while (!ttCollide(m, x, y + 1)) y++;
+      if (y < 0) continue;                       // would stick out of the top
+      const board = tt.board.map(row => row.slice());
+      m.forEach((row, r) => row.forEach((v, c) => { if (v) board[y + r][x + c] = p.type; }));
+      const s = ttEvaluate(board);
+      if (!best || s > best.s) best = {s, ri, x, y};
+    }
+  });
+  return best;
+}
+
+function ttFactStats(){
+  const st = {};
+  for (const x of attempts) if (isTTFact(x)) (st[ttFactKey(x.a, x.b)] = st[ttFactKey(x.a, x.b)] || []).push(x);
+  return st;
+}
+let ttStats = {};
+function ttNextFact(){
+  tt.queue.forEach(qq => qq.wait--);
+  const due = tt.queue.findIndex(qq => qq.wait <= 0);
+  if (due >= 0) return tt.queue.splice(due, 1)[0];
+  // lean toward facts that are missed or slow; 0s and 1s show up less
+  const facts = [], ws = [];
+  for (let a = 0; a <= TT_MAX; a++) for (let b = 0; b <= TT_MAX; b++){
+    const r = (ttStats[ttFactKey(a, b)] || []).slice(-6);
+    let w;
+    if (!r.length) w = 2;
+    else {
+      const acc = r.filter(x => x.ok).length / r.length, avg = r.reduce((s, x) => s + Math.min(x.ms, TIME_CAP), 0) / r.length / 1000;
+      w = 1 + 4*(1 - acc) + Math.min(3, avg / 3);
+    }
+    if (a <= 1 || b <= 1) w *= 0.35;
+    facts.push({a, b}); ws.push(w);
+  }
+  let x = Math.random() * ws.reduce((s, w) => s + w, 0);
+  for (let i = 0; i < facts.length; i++){ x -= ws[i]; if (x <= 0) return facts[i]; }
+  return facts[facts.length - 1];
+}
+function ttSpawn(){
+  const type = pick(Object.keys(TT_SHAPES)), m = TT_ROTS[type][0];
+  const f = ttNextFact();
+  tt.piece = {type, r: 0, x: randInt(0, TT_COLS - m[0].length), y: 0, a: f.a, b: f.b, ans: f.a*f.b, born: performance.now()};
+  tt.answer = ''; tt.waiting = false; tt.lastTick = performance.now();
+  ttRenderSide();
+  if (ttCollide(m, tt.piece.x, tt.piece.y)) ttGameOver();
+}
+function ttLock(){
+  const p = tt.piece, m = TT_ROTS[p.type][p.r];
+  let overflow = false;
+  m.forEach((row, r) => row.forEach((v, c) => { if (!v) return; if (p.y + r < 0) overflow = true; else tt.board[p.y + r][p.x + c] = p.type; }));
+  tt.piece = null;
+  if (overflow){ ttGameOver(); return; }
+  const full = tt.board.map((row, i) => row.every(Boolean) ? i : -1).filter(i => i >= 0);
+  if (full.length){
+    tt.flash = {rows: full, until: performance.now() + 300};
+    note(660, 0, .1, 'square', .08); note(990, .08, .14, 'square', .08);
+    setTimeout(() => {
+      tt.board = tt.board.filter((_, i) => !full.includes(i));
+      while (tt.board.length < TT_ROWS) tt.board.unshift(Array(TT_COLS).fill(null));
+      tt.flash = null; tt.lines += full.length;
+      tt.score += [0, 100, 300, 500, 800][full.length] * tt.level;
+      if (full.length >= 2) toast(full.length === 4 ? '🧱 TETRIS! 🎉' : `🧱 ${full.length} lines!`);
+      ttRenderSide();
+      setTimeout(ttSpawn, 150);
+    }, 320);
+  } else setTimeout(ttSpawn, 250);
+}
+function ttDropTo(toY){
+  tt.anim = {toY, next: performance.now()};
+}
+function ttMsg(t, cls){ const m = $('#ttMsg'); m.textContent = t; m.className = cls || ''; }
+function ttSubmit(timeout){
+  const p = tt.piece;
+  if (!p || tt.anim || tt.waiting || !tt.running || tt.paused) return;
+  if (!timeout && tt.answer === '') return;
+  tt.waiting = true;
+  const ms = Math.round(performance.now() - p.born), given = timeout ? null : parseInt(tt.answer, 10), ok = given === p.ans;
+  const qq = {key: 'mul|pp|-', op: 'mul', sa: 'p', sb: 'p', a: p.a, b: p.b, ans: p.ans};
+  recordAttempt(qq, given, ms, ok, {tt: true});
+  (ttStats[ttFactKey(p.a, p.b)] = ttStats[ttFactKey(p.a, p.b)] || []).push(attempts[attempts.length - 1]);
+  tt.game.push(attempts[attempts.length - 1]);
+  if (ok){
+    const {earned, notes, newBest} = rewardCorrect('mul', ms);
+    tt.correct++; tt.score += 10 * tt.level;
+    ttMsg(`✔ ${p.a} × ${p.b} = ${p.ans}   +${earned} ⭐ ${notes.join(' ')}`, 'good');
+    const best = ttBestPlacement(p);
+    if (best){
+      const m = TT_ROTS[p.type][best.ri];
+      p.r = best.ri; p.x = best.x;
+      if (p.y > best.y || ttCollide(m, p.x, p.y)) p.y = -m.length;
+      ttDropTo(best.y);
+    } else { let y = p.y; while (!ttCollide(TT_ROTS[p.type][p.r], p.x, y + 1)) y++; ttDropTo(y); }
+    if (tt.correct % 6 === 0){ tt.level++; setTimeout(() => toast(`⏩ Level ${tt.level}: faster!`), 300); }
+    afterCorrect(newBest, () => { game.stars += 5; saveGame(); updateHud(); giftSound(); toast(`🔥 ${streak} in a row! +5 ⭐ bonus`); });
+  } else {
+    penalizeWrong();
+    ttMsg(`${timeout ? '⏰ Too slow!' : '✗ Not quite!'}  ${p.a} × ${p.b} = ${p.ans}`, 'bad');
+    tt.queue.push({a: p.a, b: p.b, wait: 2});      // ask this fact again two pieces from now
+    let y = p.y; while (!ttCollide(TT_ROTS[p.type][p.r], p.x, y + 1)) y++;
+    ttDropTo(y);
+  }
+  ttRenderSide();
+}
+function ttPress(k){
+  if (!tt.piece || tt.waiting || tt.paused) return;
+  if (k === '⌫') tt.answer = tt.answer.slice(0, -1);
+  else if (k === '✔'){ ttSubmit(false); return; }
+  else if (/^\d$/.test(k) && tt.answer.length < 3) tt.answer += k;
+  ttRenderSide();
+  // answers are checked as soon as enough digits are typed
+  if (tt.answer.length >= String(tt.piece.ans).length) ttSubmit(false);
+}
+
+function ttStart(){
+  ac();
+  ttStats = ttFactStats();
+  Object.assign(tt, {board: Array.from({length: TT_ROWS}, () => Array(TT_COLS).fill(null)), piece: null, running: true, paused: false, over: false,
+    score: 0, lines: 0, level: 1, correct: 0, answer: '', anim: null, queue: [], flash: null, game: []});
+  ttMsg('Type the answer before the block lands!', '');
+  $('#ttOverlay').classList.add('hidden');
+  ttSpawn();
+}
+function ttPause(){
+  if (!tt.running || tt.paused || tt.over) return;
+  tt.paused = true; tt.pausedAt = performance.now(); ttDirty = true;
+  ttShowOverlay('⏸️ Paused', 'Take a breath! Ready when you are.', 'Resume ▶');
+}
+function ttResume(){
+  if (!tt.paused) return;
+  const gap = performance.now() - tt.pausedAt;
+  tt.paused = false; tt.lastTick += gap; if (tt.piece) tt.piece.born += gap;
+  $('#ttOverlay').classList.add('hidden');
+}
+function ttGameOver(){
+  ttDirty = true;
+  tt.running = false; tt.over = true; tt.piece = null;
+  sadSound();
+  const newBest = tt.score > (game.ttBest || 0);
+  if (newBest){ game.ttBest = tt.score; saveGame(); }
+  const g = summarize(tt.game), all = summarize(attempts.filter(isTTFact));
+  let line = `${g.n} facts · ${g.n ? pct(g.acc) : '–'} correct · ${g.n ? sec(g.avg) : '–'} per answer.`;
+  if (g.n >= 5 && all.n > g.n){
+    const before = summarize(attempts.filter(isTTFact).slice(0, -g.n));
+    if (before.n && before.avg - g.avg >= 0.2) line += ` ⚡ ${(before.avg - g.avg).toFixed(1)}s faster than your usual ${sec(before.avg)}!`;
+    else if (before.n && g.acc - before.acc >= 0.05) line += ` 🎯 More accurate than your usual ${pct(before.acc)}!`;
+  }
+  ttShowOverlay(newBest ? '🏆 New high score!' : '🧱 Game over', `Score ${tt.score} · Lines ${tt.lines} · Level ${tt.level}. ${line}`, 'Play again ▶');
+  if (newBest){ fanfare(); confetti(); }
+}
+function ttShowOverlay(title, body, btn){
+  $('#ttOvTitle').textContent = title; $('#ttOvBody').textContent = body; $('#ttOvBtn').textContent = btn;
+  $('#ttOverlay').classList.remove('hidden');
+}
+$('#ttPauseBtn').addEventListener('click', () => { if (tt.paused) ttResume(); else ttPause(); });
+$('#ttOvBtn').addEventListener('click', () => { if (tt.paused) ttResume(); else ttStart(); });
+
+function ttRenderSide(){
+  const p = tt.piece;
+  $('#ttQ').textContent = p ? `${p.a} × ${p.b}` : '–';
+  const box = $('#ttAns'); box.textContent = tt.answer || '?'; box.classList.toggle('empty', !tt.answer);
+  $('#ttScore').textContent = tt.score; $('#ttLines').textContent = tt.lines; $('#ttLevel').textContent = tt.level;
+  $('#ttBest').textContent = Math.max(game.ttBest || 0, tt.score);
+}
+const ttPad = $('#ttPad');
+['7','8','9','4','5','6','1','2','3','⌫','0','✔'].forEach(k => {
+  const b = document.createElement('button'); b.textContent = k; b.dataset.k = k;
+  if (k === '✔') b.className = 'ok';
+  ttPad.appendChild(b);
+});
+ttPad.addEventListener('click', e => { const b = e.target.closest('button'); if (b) ttPress(b.dataset.k); });
+
+const ttCv = $('#ttCanvas'), ttCtx = ttCv.getContext('2d');
+function ttDraw(now){
+  const W = ttCv.clientWidth, H = ttCv.clientHeight, dpr = window.devicePixelRatio || 1;
+  if (!W || !H) return;
+  if (ttCv.width !== Math.round(W*dpr) || ttCv.height !== Math.round(H*dpr)){ ttCv.width = Math.round(W*dpr); ttCv.height = Math.round(H*dpr); }
+  const c = ttCtx, cs = W / TT_COLS;
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.fillStyle = '#2a2140'; c.fillRect(0, 0, W, H);
+  c.strokeStyle = 'rgba(255,255,255,.06)'; c.lineWidth = 1;
+  for (let i = 1; i < TT_COLS; i++){ c.beginPath(); c.moveTo(i*cs, 0); c.lineTo(i*cs, H); c.stroke(); }
+  for (let i = 1; i < TT_ROWS; i++){ c.beginPath(); c.moveTo(0, i*cs); c.lineTo(W, i*cs); c.stroke(); }
+  const cell = (x, y, col, alpha = 1) => {
+    c.globalAlpha = alpha;
+    c.fillStyle = col; c.beginPath(); c.roundRect ? c.roundRect(x*cs + 1.5, y*cs + 1.5, cs - 3, cs - 3, 5) : c.rect(x*cs + 1.5, y*cs + 1.5, cs - 3, cs - 3); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(x*cs + 5, y*cs + 4, cs - 10, 3);
+    c.globalAlpha = 1;
+  };
+  tt.board.forEach((row, y) => row.forEach((v, x) => {
+    if (!v) return;
+    const flashing = tt.flash && tt.flash.rows.includes(y);
+    cell(x, y, flashing ? '#ffffff' : TT_COLORS[v]);
+  }));
+  const p = tt.piece;
+  if (p){
+    const m = TT_ROTS[p.type][p.r];
+    m.forEach((row, r) => row.forEach((v, cc) => { if (v && p.y + r >= 0) cell(p.x + cc, p.y + r, TT_COLORS[p.type]); }));
+    // the fact rides on the piece
+    const cx = (p.x + m[0].length/2)*cs, cy = Math.max(0.6, p.y + m.length/2)*cs;
+    const txt = `${p.a}×${p.b}`;
+    c.font = `900 ${Math.round(cs*0.62)}px Nunito, system-ui, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.lineWidth = 5; c.strokeStyle = '#2a2140'; c.strokeText(txt, cx, cy); c.fillStyle = '#fff'; c.fillText(txt, cx, cy);
+    // time bar: how far the piece has fallen
+    if (!tt.anim){
+      const m0 = TT_ROTS[p.type][p.r]; let land = p.y; while (!ttCollide(m0, p.x, land + 1)) land++;
+      const frac = land > 0 ? Math.max(0, Math.min(1, p.y / land)) : 1;
+      c.fillStyle = frac > .7 ? '#ff6b6b' : frac > .4 ? '#ffd43b' : '#69db7c';
+      c.fillRect(0, H - 5, W*(1 - frac), 5);
+    }
+  }
+}
+let ttDirty = true;
+window.addEventListener('resize', () => { ttDirty = true; });
+function ttLoop(now){
+  if (tt.running && !tt.paused && settings.theme === 'tt'){
+    const p = tt.piece;
+    if (p && tt.anim){
+      while (now >= tt.anim.next && p.y < tt.anim.toY){ p.y++; tt.anim.next += 22; }
+      if (p.y >= tt.anim.toY){ tt.anim = null; ttLock(); }
+    } else if (p && !tt.waiting && now - tt.lastTick >= ttTickMs()){
+      tt.lastTick = now;
+      if (!ttCollide(TT_ROTS[p.type][p.r], p.x, p.y + 1)) p.y++;
+      else ttSubmit(true);              // landed before an answer: counts as a miss
+    }
+  }
+  // redraw every frame only while a game is running; otherwise once after a change (saves battery)
+  if (settings.theme === 'tt' && ((tt.running && !tt.paused) || ttDirty)){ ttDraw(now); ttDirty = false; }
+  requestAnimationFrame(ttLoop);
+}
+requestAnimationFrame(ttLoop);
+document.addEventListener('visibilitychange', () => { if (document.hidden) ttPause(); });
+
+/* ---------------- Settings ---------------- */
+function syncSettingsUI(){
+  document.querySelectorAll('[data-op]').forEach(cb => cb.checked = settings.ops[cb.dataset.op]);
+  document.querySelectorAll('[data-cat]').forEach(cb => cb.checked = settings.cats[cb.dataset.cat]);
+  $('#addMax').value = String(settings.addMax); $('#mulMax').value = String(settings.mulMax);
+  $('#soundBtn').textContent = settings.sound ? '🔊' : '🔇';
+}
+document.querySelectorAll('[data-op],[data-cat]').forEach(cb => cb.addEventListener('change', () => {
+  const group = cb.dataset.op ? settings.ops : settings.cats, key = cb.dataset.op || cb.dataset.cat;
+  group[key] = cb.checked;
+  if (!Object.values(group).some(Boolean)) { group[key] = true; cb.checked = true; } // keep at least one
+  pending = {}; saveSettings();
+  if (cb.dataset.op){ if (zones.length){ assignOps(); renderMarkers(); } assignActionOps(); if (settings.theme === 'pet') renderActions(); }
+}));
+$('#addMax').addEventListener('change', e => { settings.addMax = +e.target.value; saveSettings(); });
+$('#mulMax').addEventListener('change', e => { settings.mulMax = +e.target.value; saveSettings(); });
+$('#settingsBtn').addEventListener('click', () => { ttPause(); syncSettingsUI(); $('#setOverlay').classList.remove('hidden'); });
+$('#soundBtn').addEventListener('click', () => { settings.sound = !settings.sound; saveSettings(); syncSettingsUI(); if (settings.sound) happySound(); });
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => $('#' + b.dataset.close).classList.add('hidden')));
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => {
+  if (e.target !== o || o.id === 'winOverlay' || o.id === 'hatchOverlay') return;
+  if (o.id === 'qOverlay') closeQuestion(); else o.classList.add('hidden');
+}));
+
+/* ---------------- Stats ---------------- */
+const dayKey = ts => new Date(ts).toLocaleDateString('en-CA');
+function summarize(list){
+  const n = list.length, c = list.filter(a => a.ok).length;
+  const t = n ? list.reduce((s,a) => s + Math.min(a.ms, TIME_CAP), 0) / n : 0;
+  return {n, c, acc: n ? c/n : 0, avg: t/1000};
+}
+const pct = x => Math.round(x*100) + '%';
+const sec = x => x.toFixed(1) + 's';
+const heat = acc => `hsl(${Math.round(acc*120)},75%,86%)`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function buildInsights(){
+  const out = [];
+  if (attempts.length < 10) return ['Answer at least 10 questions to unlock insights.'];
+  const cells = [];
+  for (const op of Object.keys(OPS)) for (const cat of Object.keys(CATS)){
+    const s = summarize(attempts.filter(a => a.op===op && a.cat===cat));
+    if (s.n >= 5) cells.push({label: `${OP_NAMES[op]} · ${CATS[cat].toLowerCase()}`, ...s});
+  }
+  if (cells.length >= 2){
+    const byAcc = [...cells].sort((a,b) => a.acc - b.acc || b.avg - a.avg);
+    out.push(`💪 Strongest: <b>${byAcc[byAcc.length-1].label}</b> (${pct(byAcc[byAcc.length-1].acc)} correct).`);
+    out.push(`🎯 Needs practice: <b>${byAcc[0].label}</b> (${pct(byAcc[0].acc)} correct over ${byAcc[0].n} tries).`);
+    const slow = [...cells].sort((a,b) => b.avg - a.avg)[0];
+    out.push(`🐢 Slowest: <b>${slow.label}</b>, averaging ${sec(slow.avg)} per question.`);
+  }
+  const pos = summarize(attempts.filter(a => a.cat==='pos')), neg = summarize(attempts.filter(a => a.cat!=='pos'));
+  if (pos.n >= 5 && neg.n >= 5){
+    const gap = Math.round((pos.acc - neg.acc)*100);
+    out.push(`➖ With negative numbers: ${pct(neg.acc)} correct, ${sec(neg.avg)} avg, vs ${pct(pos.acc)} / ${sec(pos.avg)} when both are positive` +
+      (Math.abs(gap) >= 10 ? ` (a ${Math.abs(gap)}-point ${gap > 0 ? 'drop' : 'gain'}).` : '.'));
+  }
+  if (attempts.length >= 40){
+    const half = Math.min(100, Math.floor(attempts.length/2));
+    const recent = summarize(attempts.slice(-half)), before = summarize(attempts.slice(-2*half, -half));
+    const dAcc = Math.round((recent.acc - before.acc)*100), dT = recent.avg - before.avg;
+    out.push(`📈 Last ${half} questions vs the ${half} before: accuracy ${dAcc >= 0 ? '+' : ''}${dAcc} points, ` +
+      `speed ${dT <= 0 ? Math.abs(dT).toFixed(1) + 's faster' : dT.toFixed(1) + 's slower'} per question.`);
+  }
+  // recovery after a miss: next question of the same type
+  let misses = 0, recovered = 0;
+  for (let i=0;i<attempts.length-1;i++){
+    if (!attempts[i].ok){
+      const nx = attempts.slice(i+1).find(a => a.k === attempts[i].k);
+      if (nx){ misses++; if (nx.ok) recovered++; }
+    }
+  }
+  if (misses >= 5) out.push(`🔁 After a miss, the follow-up question of the same type is answered correctly ${pct(recovered/misses)} of the time (${misses} misses).`);
+  return out;
+}
+
+function renderStats(){
+  const all = summarize(attempts), today = dayKey(Date.now());
+  const td = summarize(attempts.filter(a => dayKey(a.ts) === today));
+  let h = `<button class="x" data-close="statsOverlay" aria-label="Close">✕</button>
+    <h2>📊 Progress</h2><p class="sub">Saved in this browser. Times over 60 seconds count as 60s in averages.</p>
+    <div class="cards">
+      <div class="stat"><b>${all.n}</b><span>questions answered</span></div>
+      <div class="stat"><b>⭐ ${game.stars}</b><span>stars earned</span></div>
+      <div class="stat"><b>🔥 ${game.best}</b><span>best streak</span></div>
+      <div class="stat"><b>🖼️ ${game.pictures}</b><span>pictures finished</span></div>
+      <div class="stat"><b>🧱 ${game.ttBest || 0}</b><span>best Tetris score</span></div>
+      <div class="stat"><b>${pet.stage === 'pet' ? '🐣 Lv ' + petLevel() : '🥚'}</b><span>${pet.stage === 'pet' ? esc(pet.name) + ' the ' + STAGES[stageIdx()].name.toLowerCase() : 'pet egg'}</span></div>
+      <div class="stat"><b>${all.n ? pct(all.acc) : '–'}</b><span>correct overall</span></div>
+      <div class="stat"><b>${all.n ? sec(all.avg) : '–'}</b><span>average time</span></div>
+      <div class="stat"><b>${td.n ? `${td.c}/${td.n}` : '0'}</b><span>today${td.n ? ` · ${sec(td.avg)} avg` : ''}</span></div>
+    </div>
+    <h3>Insights</h3><ul class="insights">${buildInsights().map(x => `<li>${x}</li>`).join('')}</ul>`;
+  h += progressReportHTML();
+
+  // op x sign grid
+  h += `<h3>By operation and sign</h3><div class="tablewrap"><table class="grid"><tr><th></th>${Object.values(CATS).map(c=>`<th style="text-align:center">${c}</th>`).join('')}<th style="text-align:center">All</th></tr>`;
+  for (const op of Object.keys(OPS)){
+    h += `<tr><th>${OPS[op]} ${OP_NAMES[op]}</th>`;
+    for (const cat of [...Object.keys(CATS), 'all']){
+      const s = summarize(attempts.filter(a => a.op===op && (cat==='all' || a.cat===cat)));
+      h += s.n ? `<td class="cell" style="background:${heat(s.acc)}"><b>${pct(s.acc)}</b><small>${sec(s.avg)} · ${s.n} q</small></td>`
+               : `<td class="cell" style="background:#f6f2f5;color:#b9a9b5">–</td>`;
+    }
+    h += `</tr>`;
+  }
+  h += `</table></div>`;
+
+  h += ttGridHTML();
+
+  // detailed types
+  const typeRows = allTypes(false).map(t => ({key: t.key, ...summarize(attempts.filter(a => a.k === t.key))})).filter(r => r.n);
+  if (typeRows.length){
+    typeRows.sort((a,b) => a.acc - b.acc || b.avg - a.avg);
+    h += `<h3>Every question type (hardest first)</h3><div class="tablewrap"><table><tr><th>Type</th><th class="num">Tries</th><th class="num">Correct</th><th class="num">Avg time</th></tr>` +
+      typeRows.map(r => `<tr><td>${esc(typeLabel(r.key))}</td><td class="num">${r.n}</td><td class="num"><span style="background:${heat(r.acc)};padding:2px 8px;border-radius:8px">${pct(r.acc)}</span></td><td class="num">${sec(r.avg)}</td></tr>`).join('') +
+      `</table></div>`;
+  }
+
+  // daily
+  const days = {};
+  attempts.forEach(a => { const d = dayKey(a.ts); (days[d] = days[d] || []).push(a); });
+  const dk = Object.keys(days).sort().slice(-14).reverse();
+  if (dk.length){
+    const maxN = Math.max(...dk.map(d => days[d].length));
+    h += `<h3>Day by day (last 14 days practiced)</h3><div class="tablewrap"><table><tr><th>Day</th><th>Questions</th><th class="num">Correct</th><th class="num">Avg time</th></tr>` +
+      dk.map(d => { const s = summarize(days[d]);
+        return `<tr><td>${new Date(d + 'T12:00').toLocaleDateString(undefined, {weekday:'short', month:'short', day:'numeric'})}</td>
+          <td><span class="mini" style="width:${Math.max(4, 120*s.n/maxN)}px"></span> ${s.n}</td>
+          <td class="num">${pct(s.acc)}</td><td class="num">${sec(s.avg)}</td></tr>`; }).join('') + `</table></div>`;
+  }
+
+  // most missed facts
+  const missed = {};
+  attempts.forEach(a => { if (!a.ok){ const f = `${fmt(a.a)} ${OPS[a.op]} ${a.b<0 ? '(' + fmt(a.b) + ')' : fmt(a.b)} = ${fmt(a.ans)}`; (missed[f] = missed[f] || []).push(a.given); } });
+  const mk = Object.keys(missed).sort((a,b) => missed[b].length - missed[a].length).slice(0, 10);
+  if (mk.length){
+    h += `<h3>Recent missed facts</h3><div class="tablewrap"><table><tr><th>Fact</th><th>Answered</th><th class="num">Times missed</th></tr>` +
+      mk.map(f => `<tr><td><b>${esc(f)}</b></td><td>${missed[f].slice(-3).map(fmt).join(', ')}</td><td class="num">${missed[f].length}</td></tr>`).join('') + `</table></div>`;
+  }
+
+  h += `<div class="row-btns"><button id="csvBtn">⬇️ Download CSV</button><button id="resetBtn" class="danger">Reset all stats</button></div>`;
+  const panel = $('#statsPanel'); panel.innerHTML = h;
+  panel.querySelector('[data-close]').addEventListener('click', () => $('#statsOverlay').classList.add('hidden'));
+  $('#csvBtn').addEventListener('click', downloadCSV);
+  $('#resetBtn').addEventListener('click', () => {
+    if (!confirm('Erase all saved stats? This can’t be undone.')) return;
+    attempts = []; save(LS_ATT, attempts); renderStats();
+  });
+}
+function downloadCSV(){
+  const rows = [['timestamp','date','operation','sign_group','type','a','b','correct_answer','given','correct','seconds']];
+  attempts.forEach(a => rows.push([new Date(a.ts).toISOString(), dayKey(a.ts), OP_NAMES[a.op], CATS[a.cat], typeLabel(a.k), a.a, a.b, a.ans, a.given, a.ok ? 1 : 0, (a.ms/1000).toFixed(2)]));
+  const csv = rows.map(r => r.map(v => /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g,'""')}"` : v).join(',')).join('\n');
+  const url = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  const link = document.createElement('a'); link.href = url; link.download = `math-stats-${dayKey(Date.now())}.csv`;
+  document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+// overall average vs trailing averages, in a table, a one-line summary and two trend charts
+function progressReportHTML(){
+  if (attempts.length < 10) return '';
+  const now = Date.now(), DAY = 864e5;
+  const all = summarize(attempts), trail = summarize(attempts.slice(-25));
+  let h = `<h3>Progress report</h3>`;
+  if (attempts.length >= 35){
+    const dA = Math.round((trail.acc - all.acc)*100), dT = all.avg - trail.avg;
+    const accTxt = dA === 0 ? 'the same accuracy' : `${Math.abs(dA)} points ${dA > 0 ? 'more' : 'less'} accurate`;
+    const tTxt = Math.abs(dT) < 0.05 ? 'the same speed' : `${Math.abs(dT).toFixed(1)}s ${dT > 0 ? 'faster' : 'slower'} per answer`;
+    h += `<p class="report">${dA >= 0 && dT >= 0 ? '📈' : dA <= 0 && dT <= 0 ? '📉' : '📊'} Trailing average (last 25 answers): <b>${pct(trail.acc)} correct, ${sec(trail.avg)}</b> per answer. ` +
+      `Overall average: <b>${pct(all.acc)}, ${sec(all.avg)}</b>. That’s ${accTxt} and ${tTxt}.</p>`;
+  }
+  const rows = [
+    ['All time (overall average)', attempts],
+    ['Last 7 days', attempts.filter(a => a.ts >= now - 7*DAY)],
+    ['The 7 days before', attempts.filter(a => a.ts >= now - 14*DAY && a.ts < now - 7*DAY)],
+    ['Last 25 answers (trailing)', attempts.slice(-25)],
+    ['The 25 answers before', attempts.slice(-50, -25)],
+  ];
+  h += `<div class="tablewrap"><table><tr><th>Window</th><th class="num">Questions</th><th class="num">Correct</th><th class="num">Avg time</th></tr>` +
+    rows.map(([label, list]) => { const s = summarize(list);
+      return `<tr><td>${label}</td><td class="num">${s.n}</td><td class="num">${s.n ? pct(s.acc) : '–'}</td><td class="num">${s.n ? sec(s.avg) : '–'}</td></tr>`; }).join('') +
+    `</table></div>`;
+  if (attempts.length >= 30){
+    const W = 20, accs = [], times = [];
+    for (let i = W; i <= attempts.length; i++){ const s = summarize(attempts.slice(i - W, i)); accs.push(s.acc*100); times.push(s.avg); }
+    const step = Math.max(1, Math.ceil(accs.length / 160)), thin = a => a.filter((_, i) => i % step === 0 || i === a.length - 1);
+    const tMax = Math.max(...times, all.avg) * 1.1;
+    h += `<div class="sparks">` +
+      sparkChart(thin(accs), {min: 0, max: 100, avg: all.acc*100, color: '#2fb36d', title: 'Correct, rolling 20 answers', fmt: v => Math.round(v) + '%'}) +
+      sparkChart(thin(times), {min: 0, max: tMax, avg: all.avg, color: '#7c6cff', title: 'Seconds per answer, rolling 20 (lower is faster)', fmt: v => v.toFixed(1) + 's'}) +
+      `</div>`;
+  }
+  return h;
+}
+function sparkChart(vals, o){
+  const W = 320, H = 110, pl = 4, pr = 46, pt = 10, pb = 10, n = vals.length;
+  const xs = i => pl + (W - pl - pr) * (n > 1 ? i/(n - 1) : 1), ys = v => pt + (H - pt - pb) * (1 - (v - o.min)/((o.max - o.min) || 1));
+  const pts = vals.map((v, i) => `${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join(' ');
+  const last = vals[n - 1];
+  return `<figure class="spark"><figcaption>${o.title}</figcaption><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.title}">` +
+    `<line x1="${pl}" x2="${W - pr}" y1="${ys(o.avg)}" y2="${ys(o.avg)}" stroke="#b9a9b5" stroke-dasharray="4 4"/>` +
+    `<text x="${pl + 2}" y="${ys(o.avg) - 5}" font-size="10" fill="#8a7a8c">overall avg ${o.fmt(o.avg)}</text>` +
+    `<polyline points="${pts}" fill="none" stroke="${o.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>` +
+    `<circle cx="${xs(n - 1)}" cy="${ys(last)}" r="4" fill="${o.color}"/>` +
+    `<text x="${xs(n - 1) + 7}" y="${ys(last)}" font-size="12" font-weight="800" fill="${o.color}" dominant-baseline="middle">${o.fmt(last)}</text></svg></figure>`;
+}
+// 13×13 times-table grid: colored by accuracy or speed, labeled with average seconds
+let ttGridMode = 'acc';
+function ttGridHTML(){
+  const st = ttFactStats();
+  if (!Object.keys(st).length) return '';
+  const speedHeat = s => heat(Math.max(0, Math.min(1, 1 - (s - 2)/6)));   // 2s or less = green, 8s+ = red
+  let h = `<h3>Times tables (0–12)</h3><p class="sub">One square per fact (row × column), using its last 6 tries. Number = average seconds. Gray = not tried yet.</p>` +
+    `<div class="toggle">Color by: <button data-ttmode="acc" class="${ttGridMode === 'acc' ? 'on' : ''}">Correct</button><button data-ttmode="speed" class="${ttGridMode === 'speed' ? 'on' : ''}">Speed</button></div>` +
+    `<div class="tablewrap"><table class="ttgrid"><tr><th>×</th>${[...Array(TT_MAX + 1).keys()].map(b => `<th>${b}</th>`).join('')}</tr>`;
+  for (let a = 0; a <= TT_MAX; a++){
+    h += `<tr><th>${a}</th>`;
+    for (let b = 0; b <= TT_MAX; b++){
+      const r = (st[ttFactKey(a, b)] || []).slice(-6);
+      if (!r.length){ h += `<td class="na" title="${a} × ${b}: not tried yet"></td>`; continue; }
+      const s = summarize(r);
+      h += `<td style="background:${ttGridMode === 'acc' ? heat(s.acc) : speedHeat(s.avg)}" title="${a} × ${b} = ${a*b}: ${s.c}/${s.n} right, ${sec(s.avg)} average">${s.avg.toFixed(1)}</td>`;
+    }
+    h += `</tr>`;
+  }
+  h += `</table></div>`;
+  const facts = Object.entries(st).map(([k, l]) => ({k: k.replace('x', ' × '), ...summarize(l.slice(-6))})).filter(f => f.n >= 2);
+  const slow = [...facts].sort((x, y) => y.avg - x.avg).slice(0, 6);
+  const weak = facts.filter(f => f.acc < 1).sort((x, y) => x.acc - y.acc || y.avg - x.avg).slice(0, 6);
+  const ttAll = summarize(attempts.filter(isTTFact)), ttTrail = summarize(attempts.filter(isTTFact).slice(-25));
+  h += `<p class="report">Times tables overall: <b>${pct(ttAll.acc)}, ${sec(ttAll.avg)}</b> per fact · trailing 25: <b>${pct(ttTrail.acc)}, ${sec(ttTrail.avg)}</b>` +
+    (game.ttBest ? ` · best Tetris score <b>${game.ttBest}</b>` : '') +
+    `<br>🐢 Slowest: ${slow.map(f => `${f.k} (${sec(f.avg)})`).join(', ') || '–'}` +
+    `<br>🎯 Most missed: ${weak.map(f => `${f.k} (${pct(f.acc)})`).join(', ') || 'none yet 🎉'}</p>`;
+  return h;
+}
+$('#statsPanel').addEventListener('click', e => { const b = e.target.closest('[data-ttmode]'); if (b){ ttGridMode = b.dataset.ttmode; renderStats(); } });
+$('#statsBtn').addEventListener('click', () => { ttPause(); renderStats(); $('#statsOverlay').classList.remove('hidden'); });
+
+syncSettingsUI();
+updateHud();
+applyMode();
+})();
+</script>
+</body>
+</html>
