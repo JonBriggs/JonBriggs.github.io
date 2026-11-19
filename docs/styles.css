@@ -67,6 +67,17 @@ header.masthead{padding:64px 0 30px;border-bottom:1px solid var(--rule);max-widt
 /* page-level masthead variant (interior pages: smaller title) */
 .masthead.page h1{font-size:38px}
 
+/* home masthead with portrait */
+.masthead.with-photo{display:flex;gap:36px;align-items:flex-start;justify-content:space-between;max-width:var(--shell)}
+.masthead.with-photo .masthead-text{max-width:var(--measure)}
+.portrait{flex:none;width:168px;height:168px;object-fit:cover;border-radius:8px;border:1px solid var(--rule)}
+.standfirst + .standfirst{margin-top:1em}
+.standfirst .go{font-family:"IBM Plex Mono",monospace;font-size:13.5px;letter-spacing:.02em;white-space:nowrap}
+@media (max-width:680px){
+  .masthead.with-photo{flex-direction:column-reverse;gap:20px}
+  .portrait{width:116px;height:116px}
+}
+
 /* ---- article + margin notes (the signature) ---------------------------- */
 main{padding:46px 0 0}
 .article{max-width:var(--shell);margin:0 auto}
